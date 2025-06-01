@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rap Battle 2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script type="module" src="script.js"></script>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Ripple Effect Container -->
+    <div id="ripple-container"></div>
+
+    <!-- Add after the ripple-container div -->
+    <div class="floating-reactions"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="top-navbar">
+        <div class="logo">
+            <span class="logo-icon">🎵</span>
+            <span class="logo-text">Reluxe</span>
+        </div>
+
+        <div class="nav-center">
+            <button class="nav-btn active" data-section="home">Home</button>
+            <button class="nav-btn" data-section="about">About</button>
+            <button class="nav-btn" data-section="battle-arena">Battle Arena</button>
+            <button class="nav-btn" data-section="how-it-works">How it works</button>
+        </div>
+
+        <div class="auth-buttons">
+            <button class="auth-btn login-btn">Log In</button>
+            <button class="auth-btn signup-btn">Sign Up</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-container" id="home">
+        <div class="background-text">Reluxe</div>
+
+        <div class="floating-elements">
+            <div class="floating-dot"></div>
+            <div class="floating-dot"></div>
+            <div class="floating-dot"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="circle-container">
+                <div class="circle orange-circle">
+                    <div class="platform-text">The platform helps aspiring artists bring their music to the audience</div>
+                </div>
+
+                <div class="circle gray-circle">
+                    <div class="artist-image">
+                        <img src="tupac.jpg" alt="Tupac" class="artist-photo" style="display: block; object-fit: cover; border-radius: 50%;" />
+                        <div class="image-placeholder" style="display: none;">[Artist Image]</div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="reluxe-text">Reluxe</h1>
+
+            <button class="cta-button" id="learnMoreBtn" data-section="about">
+                <span>Learn More</span>
+                <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <!-- Feature Cards Section -->
+        <div class="feature-cards">
+            <div class="feature-card" data-category="create">
+                <div class="card-image">
+                    <img src="life-is-good.jpg" alt="Drake and Future - Life is Good" class="card-photo" style="display: block; object-fit: cover;" />
+                    <div class="card-placeholder" style="display: none;">[Create Image]</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-tag">Eminem</div>
+                    <h3>Eminem is a rap legend with unmatched flow</h3>
+                </div>
+                <div class="card-nav">
+                    <button type="button" class="nav-item">Menu</button>
+                    <button type="button" class="nav-item">Records</button>
+                    <button type="button" class="nav-item">Progress</button>
+                    <button type="button" class="nav-item">Create</button>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="support">
+                <div class="card-image">
+                    <img src="astroworld.jpg" alt="Travis Scott - Astroworld" class="card-photo" style="display: block; object-fit: cover;" />
+                    <div class="card-placeholder" style="display: none;">[Support Image]</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-tag">Travis Scott</div>
+                    <h3>Travis Scott is known for his unique sound and wild energy</h3>
+                </div>
+                <div class="card-nav">
+                    <button type="button" class="nav-item">Menu</button>
+                    <button type="button" class="nav-item">Records</button>
+                    <button type="button" class="nav-item">Progress</button>
+                    <button type="button" class="nav-item">Create</button>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="guaranteed">
+                <div class="card-image">
+                    <img src="gnx.jpg" alt="GNX Album Cover" class="card-photo" style="display: block; object-fit: cover;" />
+                    <div class="card-placeholder" style="display: none;">[Payment Image]</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-tag">Kendrick Lamar</div>
+                    <h3>Kendrick Lamar blends sharp lyrics with soul-stirring stories</h3>
+                </div>
+                <div class="card-nav">
+                    <button type="button" class="nav-item">Menu</button>
+                    <button type="button" class="nav-item">Records</button>
+                    <button type="button" class="nav-item">Progress</button>
+                    <button type="button" class="nav-item">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Sections -->
+    <section id="about" class="content-section hidden">
+        <div class="section-content about-content">
+            <h2 class="about-title">About Reluxe</h2>
+            
+            <div class="about-grid">
+                <!-- Vision Section -->
+                <div class="about-card vision-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Our Vision</h3>
+                    <p>Empowering artists to showcase their talent and connect with fans worldwide. We believe every voice deserves to be heard.</p>
+                </div>
+
+                <!-- Mission Section -->
+                <div class="about-card mission-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Our Mission</h3>
+                    <p>Creating a platform where creativity meets opportunity, enabling artists to battle, collaborate, and grow together.</p>
+                </div>
+
+                <!-- Features Section -->
+                <div class="about-card features-card">
+                    <div class="card-icon">💫</div>
+                    <h3>What We Offer</h3>
+                    <ul class="features-list">
+                        <li>Live Rap Battles</li>
+                        <li>Artist Collaborations</li>
+                        <li>Community Feedback</li>
+                        <li>Global Exposure</li>
+                    </ul>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="about-card stats-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Platform Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number" data-value="50000">50,000+</span>
+                            <span class="stat-label">Artists</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-value="100000">100,000+</span>
+                            <span class="stat-label">Battles</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-value="1000000">1,000,000+</span>
+                            <span class="stat-label">Fans</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-value="24/7">24/7</span>
+                            <span class="stat-label">Live</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Join Section -->
+            <div class="join-section">
+                <h3>Ready to Join the Revolution?</h3>
+                <button class="join-btn">Start Your Journey</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="battle-arena" class="content-section hidden">
+        <div class="section-content">
+            <h2>Battle Arena</h2>
+            <div class="battle-container">
+                <div class="prewritten-library">
+                    <h3>Rap Library</h3>
+                    <div class="rap-categories">
+                        <button class="category-btn" data-category="roast">Roast</button>
+                        <button class="category-btn" data-category="funny">Funny</button>
+                        <button class="category-btn" data-category="aggressive">Aggressive</button>
+                        <button class="category-btn" data-category="freestyle">Freestyle</button>
+                    </div>
+                    <div class="rap-list">
+                        <!-- Rap verses will be dynamically loaded based on category -->
+                    </div>
+                </div>
+
+                <div class="battle-stage">
+                    <div class="spectator-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="spectatorMode" name="spectatorMode">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="spectator-label">Spectator Mode</span>
+                        <div class="spectator-count">
+                            <span class="count">0</span>
+                            <span class="icon">👥</span>
+                        </div>
+                    </div>
+
+                    <div class="rapper-side left">
+                        <div class="rapper-profile">
+                            <!-- Add avatar selection -->
+                            <div class="rapper-avatar-selector">
+                                <div class="avatar-preview">
+                                    <img src="mc-avatar-sunglasses.jpg" alt="MC with Sunglasses" class="avatar-image" style="object-fit: cover; width: 100%; height: 100%;">
+                                    <div class="avatar-overlay">
+                                        <span class="change-avatar-btn">Change Avatar</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rapper-info">
+                                <h3 class="rapper-name">DHANJI</h3>
+                                <div class="rapper-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">293</span>
+                                        <span class="stat-label">Wins</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">9.4</span>
+                                        <span class="stat-label">Rating</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rapper-controls">
+                                <select class="voice-select" id="leftVoiceSelect" name="leftVoiceSelect">
+                                    <option value="en-US-natalie">Natalie (Female)</option>
+                                    <option value="en-IN-rohan">Rohan (Male)</option>
+                                    <option value="en-IN-aarav">Aarav (Male)</option>
+                                </select>
+                                
+                                <!-- Verse Input System -->
+                                <div class="verse-input-system">
+                                    <div class="verse-input-container">
+                                        <textarea 
+                                            class="verse-input" 
+                                            id="leftRapText"
+                                            name="leftRapText"
+                                            placeholder="Write your rap verse here..."
+                                            rows="6"
+                                        ></textarea>
+                                        <div class="verse-input-tools">
+                                            <button class="tool-btn clear-btn" id="leftClearBtn" name="leftClearBtn">Clear</button>
+                                            <button class="tool-btn preview-btn" id="leftPreviewBtn" name="leftPreviewBtn">Preview</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="rap-verse-container">
+                                    <!-- Rap verses will be typed here -->
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="convert-btn">Convert to Audio 🎤</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vote-section">
+                            <div class="vote-buttons">
+                                <button class="vote-btn-left">Vote for DHANJI</button>
+                            </div>
+                            
+                            <div class="vote-counts">
+                                <span class="vote-count-left">0</span>
+                            </div>
+                            
+                            <div class="vote-indicator">
+                                <div class="vote-indicator-fill"></div>
+                            </div>
+                            
+                            <div class="rapper-turn-indicator">
+                                <div class="turn-arrow"></div>
+                                <span class="turn-text">Waiting to start...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="versus-section">
+                        <div class="battle-header">
+                            <div class="battle-timer-container">
+                                <div class="timer-label">Time Remaining</div>
+                                <div class="battle-timer">02:00</div>
+                            </div>
+                            <div class="battle-progress">
+                                <div class="battle-progress-fill"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="battle-main">
+                            <div class="vs-animation">
+                                <div class="vs-text">VS</div>
+                                <div class="vs-effects"></div>
+                            </div>
+                        </div>
+
+                        <div class="battle-controls">
+                            <button class="start-battle-btn">
+                                <span class="btn-icon">🎤</span>
+                                <span class="btn-text">Begin Battle</span>
+                            </button>
+                            <div class="battle-options">
+                                <button class="option-btn" title="Battle Rules">📋</button>
+                                <button class="option-btn" title="Sound Settings">🔊</button>
+                                <button class="option-btn" title="Report">⚠️</button>
+                            </div>
+                        </div>
+
+                        <!-- Shared Suggestions Panel -->
+                        <div class="shared-suggestions">
+                            <h4>Suggested Lines</h4>
+                            <div class="suggestions-container">
+                                <div class="suggestion-category">
+                                    <span class="category-label">🔥 Battle</span>
+                                    <div class="suggestion-line" data-line="Step up to the mic, but you better think twice">
+                                        Step up to the mic, but you better think twice
+                                    </div>
+                                    <div class="suggestion-line" data-line="Your rhymes are weak like your stage presence">
+                                        Your rhymes are weak like your stage presence
+                                    </div>
+                                </div>
+                                <div class="suggestion-category">
+                                    <span class="category-label">🎵 Flow</span>
+                                    <div class="suggestion-line" data-line="Flowing smooth like a river in the night">
+                                        Flowing smooth like a river in the night
+                                    </div>
+                                    <div class="suggestion-line" data-line="Bars so hot they're melting the mic">
+                                        Bars so hot they're melting the mic
+                                    </div>
+                                </div>
+                                <div class="suggestion-category">
+                                    <span class="category-label">💫 Wordplay</span>
+                                    <div class="suggestion-line" data-line="I'm the architect of rhymes, building verse by verse">
+                                        I'm the architect of rhymes, building verse by verse
+                                    </div>
+                                    <div class="suggestion-line" data-line="Words hit harder than a metaphor in reverse">
+                                        Words hit harder than a metaphor in reverse
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rapper-side right">
+                        <div class="rapper-profile">
+                            <!-- Add avatar selection -->
+                            <div class="rapper-avatar-selector">
+                                <div class="avatar-preview">
+                                    <img 
+                                        src="krsna-portrait.jpg" 
+                                        alt="KR$NA" 
+                                        class="avatar-image" 
+                                        style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; background-color: rgba(255, 140, 0, 0.2);"
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 140, 0, 0.2); color: white;\'>KR$NA</div>'"
+                                    >
+                                    <div class="avatar-overlay">
+                                        <span class="change-avatar-btn">Change Avatar</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rapper-info">
+                                <h3 class="rapper-name">KR$NA</h3>
+                                <div class="rapper-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">324</span>
+                                        <span class="stat-label">Wins</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">9.6</span>
+                                        <span class="stat-label">Rating</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rapper-controls">
+                                <select class="voice-select" id="rightVoiceSelect" name="rightVoiceSelect">
+                                    <option value="en-US-natalie">Natalie (Female)</option>
+                                    <option value="en-IN-rohan">Rohan (Male)</option>
+                                    <option value="en-IN-aarav">Aarav (Male)</option>
+                                </select>
+                                
+                                <!-- Verse Input System -->
+                                <div class="verse-input-system">
+                                    <div class="verse-input-container">
+                                        <textarea 
+                                            class="verse-input" 
+                                            id="rightRapText"
+                                            name="rightRapText"
+                                            placeholder="Write your rap verse here..."
+                                            rows="6"
+                                        ></textarea>
+                                        <div class="verse-input-tools">
+                                            <button class="tool-btn clear-btn" id="rightClearBtn" name="rightClearBtn">Clear</button>
+                                            <button class="tool-btn preview-btn" id="rightPreviewBtn" name="rightPreviewBtn">Preview</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="rap-verse-container">
+                                    <!-- Rap verses will be typed here -->
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="convert-btn">Convert to Audio 🎤</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vote-section">
+                            <div class="vote-buttons">
+                                <button class="vote-btn-right">Vote for KR$NA</button>
+                            </div>
+                            
+                            <div class="vote-counts">
+                                <span class="vote-count-right">0</span>
+                            </div>
+                            
+                            <div class="vote-indicator">
+                                <div class="vote-indicator-fill"></div>
+                            </div>
+                            
+                            <div class="rapper-turn-indicator">
+                                <div class="turn-arrow"></div>
+                                <span class="turn-text">Waiting to start...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-comments">
+                    <h3>Battle Comments</h3>
+                    <div class="comments-container">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                    <div class="comment-input-section">
+                        <textarea 
+                            class="comment-input" 
+                            id="commentText"
+                            name="commentText"
+                            placeholder="Drop your thoughts..."
+                        ></textarea>
+                        <button class="post-comment-btn" id="postCommentBtn" name="postCommentBtn">Post 💭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="content-section hidden">
+        <div class="section-content">
+            <h2>How It Works</h2>
+            <p>Learn how Reluxe connects artists with their audience through our innovative platform.</p>
+        </div>
+    </section>
+
+    <!-- Simulated Audio Element -->
+    <audio id="musicPlayer"></audio>
+
+    <!-- Load scripts -->
+    <script src="particles.js"></script>
+    <script src="animation.js"></script>
+</body>
+
+</html>
