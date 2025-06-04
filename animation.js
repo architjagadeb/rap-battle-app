@@ -87,7 +87,9 @@ function setupStatsAnimation() {
                     stat.textContent = '0';
                     animateValue(stat, 0, endValue, 2000);
                 });
-                observer.unobserve(entry.target);
+                
+                // Use disconnect instead of unobserve for cleaner cleanup
+                observer.disconnect();
             }
         });
     }, { threshold: 0.5 });

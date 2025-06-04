@@ -11,6 +11,139 @@
 </head>
 
 <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="mc-avatar-sunglasses.jpg" alt="DJ Shadow Avatar">
+                </div>
+                <div class="user-info">
+                    <h3>DJ Shadow</h3>
+                    <span class="user-status">Pro Battler</span>
+                </div>
+            </div>
+            <button class="close-sidebar" aria-label="Close Menu">×</button>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <h3>Quick Stats</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">128</span>
+                        <span class="stat-label">Battles</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">82</span>
+                        <span class="stat-label">Wins</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">9.2</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <h3>Navigation</h3>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="sidebar-link" data-section="home">
+                        <span class="link-icon">🏠</span>
+                        <span class="link-text">Home</span>
+                        <span class="link-indicator"></span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-section="battle-arena">
+                        <span class="link-icon">🎤</span>
+                        <span class="link-text">Battle Arena</span>
+                        <span class="link-badge hot">Live</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-section="about">
+                        <span class="link-icon">ℹ️</span>
+                        <span class="link-text">About</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-section="how-it-works">
+                        <span class="link-icon">📖</span>
+                        <span class="link-text">How it Works</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <h3>Battle Categories</h3>
+                    <button class="section-toggle">
+                        <span class="toggle-icon">⌄</span>
+                    </button>
+                </div>
+                <div class="category-grid">
+                    <a href="#" class="category-card" data-category="roast">
+                        <span class="category-icon">🔥</span>
+                        <span class="category-name">Roast</span>
+                        <span class="category-count">24</span>
+                    </a>
+                    <a href="#" class="category-card" data-category="funny">
+                        <span class="category-icon">😂</span>
+                        <span class="category-name">Funny</span>
+                        <span class="category-count">18</span>
+                    </a>
+                    <a href="#" class="category-card" data-category="aggressive">
+                        <span class="category-icon">💪</span>
+                        <span class="category-name">Aggressive</span>
+                        <span class="category-count">32</span>
+                    </a>
+                    <a href="#" class="category-card" data-category="freestyle">
+                        <span class="category-icon">🎵</span>
+                        <span class="category-name">Freestyle</span>
+                        <span class="category-count">45</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <h3>Recent Battles</h3>
+                </div>
+                <div class="recent-battles">
+                    <div class="battle-item">
+                        <div class="battle-info">
+                            <span class="battle-type">Freestyle Battle</span>
+                            <span class="battle-time">2h ago</span>
+                        </div>
+                    </div>
+                    <div class="battle-item">
+                        <div class="battle-info">
+                            <span class="battle-type">Roast Battle</span>
+                            <span class="battle-time">5h ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-actions">
+                <button class="action-btn">
+                    <span class="action-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+                <button class="action-btn">
+                    <span class="action-icon">🎮</span>
+                    <span>Practice</span>
+                </button>
+                <button class="action-btn logout">
+                    <span class="action-icon">🚪</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Particle Background -->
     <canvas id="particleCanvas"></canvas>
 
@@ -23,8 +156,8 @@
     <!-- Top Navigation Bar -->
     <nav class="top-navbar">
         <div class="logo">
-            <span class="logo-icon">🎵</span>
-            <span class="logo-text">Reluxe</span>
+            <button type="button" class="logo-icon" aria-label="Open Menu">≡</button>
+            <span class="logo-text">BarWars</span>
         </div>
 
         <div class="nav-center">
@@ -35,14 +168,25 @@
         </div>
 
         <div class="auth-buttons">
-            <button class="auth-btn login-btn">Log In</button>
-            <button class="auth-btn signup-btn">Sign Up</button>
+            <button class="search-btn">🔍</button>
+            <a href="news.html" class="news-icon" aria-label="News">📰</a>
+            <button class="auth-btn login-btn" id="loginBtn" name="loginBtn">Log In</button>
+            <button class="auth-btn practice-btn" id="practiceBtn" name="practiceBtn">Practice Ground</button>
         </div>
     </nav>
 
+    <!-- Search Overlay -->
+    <div class="search-overlay hidden">
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" name="searchInput" placeholder="Search battles, rappers...">
+            <button class="close-search">✕</button>
+        </div>
+        <div class="search-results"></div>
+    </div>
+
     <!-- Hero Section -->
     <div class="hero-container" id="home">
-        <div class="background-text">Reluxe</div>
+        <div class="background-text">BarWars</div>
 
         <div class="floating-elements">
             <div class="floating-dot"></div>
@@ -64,7 +208,7 @@
                 </div>
             </div>
 
-            <h1 class="reluxe-text">Reluxe</h1>
+            <h1 class="main-title">BarWars</h1>
 
             <button class="cta-button" id="learnMoreBtn" data-section="about">
                 <span>Learn More</span>
@@ -76,7 +220,7 @@
         <div class="feature-cards">
             <div class="feature-card" data-category="create">
                 <div class="card-image">
-                    <img src="life-is-good.jpg" alt="Drake and Future - Life is Good" class="card-photo" style="display: block; object-fit: cover;" />
+                    <img src="life-is-good.jpg" alt="Drake and Kendrick Lamar - Life is Good" class="card-photo" style="display: block; object-fit: cover;" />
                     <div class="card-placeholder" style="display: none;">[Create Image]</div>
                 </div>
                 <div class="card-content">
@@ -130,7 +274,7 @@
     <!-- Content Sections -->
     <section id="about" class="content-section hidden">
         <div class="section-content about-content">
-            <h2 class="about-title">About Reluxe</h2>
+            <h2 class="about-title">About BarWars</h2>
             
             <div class="about-grid">
                 <!-- Vision Section -->
@@ -187,7 +331,7 @@
             <!-- Join Section -->
             <div class="join-section">
                 <h3>Ready to Join the Revolution?</h3>
-                <button class="join-btn">Start Your Journey</button>
+                <button class="join-btn" id="joinBtn" name="joinBtn">Start Your Journey</button>
             </div>
         </div>
     </section>
@@ -199,10 +343,10 @@
                 <div class="prewritten-library">
                     <h3>Rap Library</h3>
                     <div class="rap-categories">
-                        <button class="category-btn" data-category="roast">Roast</button>
-                        <button class="category-btn" data-category="funny">Funny</button>
-                        <button class="category-btn" data-category="aggressive">Aggressive</button>
-                        <button class="category-btn" data-category="freestyle">Freestyle</button>
+                        <button class="category-btn" id="roastBtn" name="roastBtn" data-category="roast">Roast</button>
+                        <button class="category-btn" id="funnyBtn" name="funnyBtn" data-category="funny">Funny</button>
+                        <button class="category-btn" id="aggressiveBtn" name="aggressiveBtn" data-category="aggressive">Aggressive</button>
+                        <button class="category-btn" id="freestyleBtn" name="freestyleBtn" data-category="freestyle">Freestyle</button>
                     </div>
                     <div class="rap-list">
                         <!-- Rap verses will be dynamically loaded based on category -->
@@ -234,7 +378,7 @@
                                 </div>
                             </div>
                             <div class="rapper-info">
-                                <h3 class="rapper-name">DHANJI</h3>
+                                <h3 class="rapper-name" id="rapper1">DHANJI</h3>
                                 <div class="rapper-stats">
                                     <div class="stat">
                                         <span class="stat-value">293</span>
@@ -274,13 +418,13 @@
                                     <!-- Rap verses will be typed here -->
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="convert-btn">Convert to Audio 🎤</button>
+                                    <button class="convert-btn" id="leftConvertBtn" name="leftConvertBtn">Convert to Audio 🎤</button>
                                 </div>
                             </div>
                         </div>
                         <div class="vote-section">
                             <div class="vote-buttons">
-                                <button class="vote-btn-left">Vote for DHANJI</button>
+                                <button class="vote-btn-left" id="voteLeftBtn" name="voteLeftBtn">Vote for DHANJI</button>
                             </div>
                             
                             <div class="vote-counts">
@@ -289,11 +433,6 @@
                             
                             <div class="vote-indicator">
                                 <div class="vote-indicator-fill"></div>
-                            </div>
-                            
-                            <div class="rapper-turn-indicator">
-                                <div class="turn-arrow"></div>
-                                <span class="turn-text">Waiting to start...</span>
                             </div>
                         </div>
                     </div>
@@ -317,14 +456,14 @@
                         </div>
 
                         <div class="battle-controls">
-                            <button class="start-battle-btn">
+                            <button class="start-battle-btn" id="startBattleBtn" name="startBattleBtn">
                                 <span class="btn-icon">🎤</span>
                                 <span class="btn-text">Begin Battle</span>
                             </button>
                             <div class="battle-options">
-                                <button class="option-btn" title="Battle Rules">📋</button>
-                                <button class="option-btn" title="Sound Settings">🔊</button>
-                                <button class="option-btn" title="Report">⚠️</button>
+                                <button class="option-btn" id="rulesBtn" name="rulesBtn" title="Battle Rules">📋</button>
+                                <button class="option-btn" id="soundBtn" name="soundBtn" title="Sound Settings">🔊</button>
+                                <button class="option-btn" id="reportBtn" name="reportBtn" title="Report">⚠️</button>
                             </div>
                         </div>
 
@@ -333,30 +472,36 @@
                             <h4>Suggested Lines</h4>
                             <div class="suggestions-container">
                                 <div class="suggestion-category">
-                                    <span class="category-label">🔥 Battle</span>
-                                    <div class="suggestion-line" data-line="Step up to the mic, but you better think twice">
-                                        Step up to the mic, but you better think twice
+                                    <span class="category-label">🤪 Funny</span>
+                                    <div class="suggestion-line" draggable="true">
+                                        Tere jokes pe hansi sirf mummy ko aayi,
+                                        Baaki sab ne bola, "beta chhup ho ja bhai"
                                     </div>
-                                    <div class="suggestion-line" data-line="Your rhymes are weak like your stage presence">
-                                        Your rhymes are weak like your stage presence
+                                    <div class="suggestion-line" draggable="true">
+                                        You post gym pics like you lift a ton,
+                                        But dropped your phone and called it a 'leg day run'
                                     </div>
                                 </div>
                                 <div class="suggestion-category">
-                                    <span class="category-label">🎵 Flow</span>
-                                    <div class="suggestion-line" data-line="Flowing smooth like a river in the night">
-                                        Flowing smooth like a river in the night
+                                    <span class="category-label">🔥 Battle</span>
+                                    <div class="suggestion-line" draggable="true">
+                                        Step up to the mic, but you better think twice,
+                                        Your rhymes are weak like your stage presence
                                     </div>
-                                    <div class="suggestion-line" data-line="Bars so hot they're melting the mic">
-                                        Bars so hot they're melting the mic
+                                    <div class="suggestion-line" draggable="true">
+                                        I'm the storm in the booth, thunder spittin' loud,
+                                        You flex online, but freeze on the mic
                                     </div>
                                 </div>
                                 <div class="suggestion-category">
                                     <span class="category-label">💫 Wordplay</span>
-                                    <div class="suggestion-line" data-line="I'm the architect of rhymes, building verse by verse">
-                                        I'm the architect of rhymes, building verse by verse
-                                    </div>
-                                    <div class="suggestion-line" data-line="Words hit harder than a metaphor in reverse">
+                                    <div class="suggestion-line" draggable="true">
+                                        I'm the architect of rhymes, building verse by verse,
                                         Words hit harder than a metaphor in reverse
+                                    </div>
+                                    <div class="suggestion-line" draggable="true">
+                                        Flow mera smooth, jaise butter on toast,
+                                        Tere bars ka taste, jaise kadvi chai ka dose
                                     </div>
                                 </div>
                             </div>
@@ -369,11 +514,11 @@
                             <div class="rapper-avatar-selector">
                                 <div class="avatar-preview">
                                     <img 
-                                        src="krsna-portrait.jpg" 
-                                        alt="KR$NA" 
+                                        src="mc stan.jpg" 
+                                        alt="MC Stan" 
                                         class="avatar-image" 
                                         style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; background-color: rgba(255, 140, 0, 0.2);"
-                                        onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 140, 0, 0.2); color: white;\'>KR$NA</div>'"
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 140, 0, 0.2); color: white;\'>MC Stan</div>'"
                                     >
                                     <div class="avatar-overlay">
                                         <span class="change-avatar-btn">Change Avatar</span>
@@ -381,7 +526,7 @@
                                 </div>
                             </div>
                             <div class="rapper-info">
-                                <h3 class="rapper-name">KR$NA</h3>
+                                <h3 class="rapper-name" id="rapper2">MC Stan</h3>
                                 <div class="rapper-stats">
                                     <div class="stat">
                                         <span class="stat-value">324</span>
@@ -421,13 +566,13 @@
                                     <!-- Rap verses will be typed here -->
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="convert-btn">Convert to Audio 🎤</button>
+                                    <button class="convert-btn" id="rightConvertBtn" name="rightConvertBtn">Convert to Audio 🎤</button>
                                 </div>
                             </div>
                         </div>
                         <div class="vote-section">
                             <div class="vote-buttons">
-                                <button class="vote-btn-right">Vote for KR$NA</button>
+                                <button class="vote-btn-right" id="voteRightBtn" name="voteRightBtn">Vote for MC Stan</button>
                             </div>
                             
                             <div class="vote-counts">
@@ -436,11 +581,6 @@
                             
                             <div class="vote-indicator">
                                 <div class="vote-indicator-fill"></div>
-                            </div>
-                            
-                            <div class="rapper-turn-indicator">
-                                <div class="turn-arrow"></div>
-                                <span class="turn-text">Waiting to start...</span>
                             </div>
                         </div>
                     </div>
@@ -466,9 +606,194 @@
     </section>
 
     <section id="how-it-works" class="content-section hidden">
-        <div class="section-content">
-            <h2>How It Works</h2>
-            <p>Learn how Reluxe connects artists with their audience through our innovative platform.</p>
+        <div class="section-content how-it-works-content">
+            <h2 class="section-title">How It Works</h2>
+            
+            <!-- Interactive Timeline -->
+            <div class="timeline-section">
+                <h3>Get Started in 5 Simple Steps</h3>
+                <div class="timeline-container">
+                    <div class="timeline-step" data-step="1">
+                        <div class="step-icon">👤</div>
+                        <h4>Choose Your Role</h4>
+                        <p>Battle as a rapper or join as a spectator to vote and comment</p>
+                    </div>
+                    <div class="timeline-step" data-step="2">
+                        <div class="step-icon">🎭</div>
+                        <h4>Select Your Style</h4>
+                        <p>Pick from various categories: Roast, Funny, Aggressive, or Freestyle</p>
+                    </div>
+                    <div class="timeline-step" data-step="3">
+                        <div class="step-icon">✍️</div>
+                        <h4>Write & Perform</h4>
+                        <p>Use suggested lines or write your own verses to battle</p>
+                    </div>
+                    <div class="timeline-step" data-step="4">
+                        <div class="step-icon">🎤</div>
+                        <h4>Battle & Vote</h4>
+                        <p>Engage in real-time battles and let the community vote</p>
+                    </div>
+                    <div class="timeline-step" data-step="5">
+                        <div class="step-icon">🌟</div>
+                        <h4>Grow & Connect</h4>
+                        <p>Build your reputation and connect with the community</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="features-grid">
+                <div class="feature-card" data-feature="voice">
+                    <div class="feature-icon">🎙️</div>
+                    <h3>Voice Conversion</h3>
+                    <p>Convert your text to rap vocals with AI technology</p>
+                    <div class="feature-demo">
+                        <button class="demo-btn">Try Demo</button>
+                        <div class="audio-preview">
+                            <div class="waveform"></div>
+                            <button class="play-btn">▶️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card" data-feature="suggestions">
+                    <div class="feature-icon">💭</div>
+                    <h3>Suggestion System</h3>
+                    <p>Access pre-written lines or create your own</p>
+                    <div class="feature-demo">
+                        <div class="mini-suggestion" draggable="true">
+                            Drop some fire bars here! 🔥
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card" data-feature="battle">
+                    <div class="feature-icon">⚔️</div>
+                    <h3>Battle Mechanics</h3>
+                    <p>Timer-based turns and real-time voting</p>
+                    <div class="feature-demo">
+                        <div class="mini-timer">02:00</div>
+                        <div class="mini-votes">
+                            <span class="vote-count">127</span>
+                            <span class="vote-icon">👍</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Demo -->
+            <div class="demo-section">
+                <h3>Try It Out</h3>
+                <div class="demo-container">
+                    <div class="demo-controls">
+                        <button class="demo-step" data-step="1">Write</button>
+                        <button class="demo-step" data-step="2">Convert</button>
+                        <button class="demo-step" data-step="3">Battle</button>
+                    </div>
+                    <div class="demo-playground">
+                        <textarea class="demo-input" placeholder="Write your verse here..."></textarea>
+                        <div class="demo-output"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Highlights -->
+            <div class="community-section">
+                <h3>Community Highlights</h3>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <div class="highlight-header">
+                            <img src="krsna-portrait.jpg" alt="Featured Battler">
+                            <h4>Top Battle of the Week</h4>
+                        </div>
+                        <div class="highlight-stats">
+                            <span>🔥 2.4K Votes</span>
+                            <span>💬 156 Comments</span>
+                        </div>
+                    </div>
+                    <!-- Add more highlight cards -->
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h3>Frequently Asked Questions</h3>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do battles work?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Battles are turn-based rap competitions where two rappers face off. Each rapper gets 2 minutes per turn to deliver their verses. The community votes for their favorite performance.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How does voting work?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Anyone can vote for their favorite rapper during a battle. Votes are counted in real-time, and the rapper with the most votes wins the battle.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I participate as a spectator?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Yes! Spectator mode allows you to watch battles, vote for your favorite performers, and engage in the community chat without participating in the battle directly.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What makes BarWars different from other platforms?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            BarWars combines AI-powered voice conversion, real-time battles, and a vibrant community. Our platform offers unique features like voice customization, pre-written verse suggestions, and an interactive voting system.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How does the voice conversion work?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Our AI technology converts your written verses into dynamic rap vocals. You can choose from various voice styles and customize the delivery to match your style.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I improve my ranking?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Win battles, receive votes, and engage with the community. Your ranking increases based on your performance, consistency, and community engagement.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Are there any rules for battles?</span>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Yes, we maintain a respectful environment. No hate speech, explicit content, or personal attacks. Focus on creativity, wordplay, and musical talent.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h3>Ready to Battle?</h3>
+                <p>Join the community and start your rap battle journey</p>
+                <button class="start-battle-btn" data-section="battle-arena">
+                    <span class="btn-icon">🎤</span>
+                    <span class="btn-text">Enter Battle Arena</span>
+                </button>
+            </div>
         </div>
     </section>
 

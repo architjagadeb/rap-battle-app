@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarWars News</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* News Page Specific Styles */
+        .news-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .news-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .news-logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .news-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .news-nav a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .news-nav a:hover {
+            color: white;
+        }
+
+        .featured-article {
+            grid-column: 1 / span 8;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+        }
+
+        .featured-article img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            color: white;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .article-meta img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .featured-content h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .featured-content p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+        }
+
+        .side-articles {
+            grid-column: 9 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .side-article {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .side-article:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .side-article img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .side-article-content h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .side-article-content p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .news-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-card-content {
+            padding: 1.5rem;
+        }
+
+        .news-card-content h3 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .news-card-content p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            color: #ff8c00;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .read-more:hover {
+            color: #ff4500;
+        }
+
+        @media (max-width: 1200px) {
+            .featured-article {
+                grid-column: 1 / -1;
+            }
+            .side-articles {
+                grid-column: 1 / -1;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .news-container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .news-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .featured-content h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="news-container">
+        <header class="news-header">
+            <div class="news-logo">
+                <span>📰</span>
+                <span>BarWars News</span>
+            </div>
+            <nav class="news-nav">
+                <a href="#latest">Latest</a>
+                <a href="#battles">Battles</a>
+                <a href="#features">Features</a>
+                <a href="#community">Community</a>
+                <a href="index.html">Back to App</a>
+            </nav>
+        </header>
+
+        <article class="featured-article">
+            <img src="life-is-good.jpg" alt="Featured Battle Event">
+            <div class="featured-content">
+                <div class="article-meta">
+                    <img src="mc-avatar-sunglasses.jpg" alt="Author">
+                    <span>By DJ Shadow</span>
+                    <span>•</span>
+                    <span>2 hours ago</span>
+                </div>
+                <h1>Historic Battle: Drake vs Kendrick Lamar Sets New Viewership Record</h1>
+                <p>The latest rap battle between Drake and Kendrick Lamar broke all previous viewership records on BarWars, with over 1 million concurrent viewers tuning in to witness the epic showdown.</p>
+            </div>
+        </article>
+
+        <aside class="side-articles">
+            <div class="side-article">
+                <img src="Rappers.jpg" alt="Evolution of Battle Rap">
+                <div class="side-article-content">
+                    <h3>The Evolution of Battle Rap: From Streets to Digital Arena</h3>
+                    <p>Exploring how technology is transforming the battle rap scene</p>
+                </div>
+            </div>
+            <div class="side-article">
+                <img src="Eminem_Slim Shady com sua hello kitty.jpg" alt="Eminem with Hello Kitty" style="object-position: center top;">
+                <div class="side-article-content">
+                    <h3>Eminem's Influence on Modern Battle Rap</h3>
+                    <p>How the rap god shaped today's battle culture</p>
+                </div>
+            </div>
+            <div class="side-article">
+                <img src="krsnanewalbum.jpg" alt="KRSNA Yours Truly Album Cover" style="object-fit: cover;">
+                <div class="side-article-content">
+                    <h3>KRSNA Drops 'Yours Truly' – Bars With a Vengeance</h3>
+                    <p>Jab KR$NA drops, lage occasion</p>
+                </div>
+            </div>
+        </aside>
+
+        <section class="news-grid">
+            <div class="news-card">
+                <img src="mc stan.jpg" alt="MC Stan">
+                <div class="news-card-content">
+                    <h3>Rising Stars: MC Stan's Meteoric Rise</h3>
+                    <p>From underground battles to mainstream success, MC Stan's journey inspires a new generation.</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+            <div class="news-card">
+                <img src="raftaar.jpg" alt="Raftaar">
+                <div class="news-card-content">
+                    <h3>Raftaar Announces Global Battle Tournament</h3>
+                    <p>The legendary rapper is organizing a worldwide competition with a prize pool of $100,000.</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+            <div class="news-card">
+                <img src="gnx.jpg" alt="Community Event">
+                <div class="news-card-content">
+                    <h3>Community Spotlight: Best Battles of the Month</h3>
+                    <p>Check out the most epic showdowns from our talented community members.</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html> 

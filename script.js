@@ -22,439 +22,866 @@ class ReluxePlatform {
 
     init() {
         console.log('Initializing ReluxePlatform...');
-        this.setupEventListeners();
+        
+        // Initialize core functionality first
         this.initializeAnimations();
         this.loadUserData();
         this.setupMusicPlayer();
+        
+        // Initialize navigation last to ensure all sections are ready
         this.setupNavigation();
+        
+        // Initialize Murf AI
         this.initializeMurfAI();
+        
+        // Initialize comment system
+        this.initializeCommentSystem();
+        
+        // Initialize How It Works page
+        this.initializeHowItWorks();
+        
+        // Set up window resize handler
+        window.addEventListener('resize', () => this.handleResize());
+        
+        // Initialize theme toggle
+        this.initializeThemeToggle();
+        
+        // Initialize search functionality
+        this.initializeSearch();
+
+        // Initialize sidebar
+        this.initializeSidebar();
+        
+        // Show initial section based on URL hash or default to home
+        const initialSection = window.location.hash.slice(1) || 'home';
+        const showSection = this.setupNavigation();
+        showSection(initialSection);
     }
 
-    setupEventListeners() {
-        console.log('Setting up event listeners...');
-        this.setupNavigation();
-        this.setupAuthButtons();
-        this.setupMusicControls();
-        this.setupCardNavigation();
+    initializeThemeToggle() {
+        const themeToggle = document.querySelector('.theme-toggle');
+        if (themeToggle) {
+            const root = document.documentElement;
+            let isDarkTheme = true;
+
+            themeToggle.addEventListener('click', () => {
+                isDarkTheme = !isDarkTheme;
+                root.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+                themeToggle.textContent = isDarkTheme ? '🌓' : '☀️';
+            });
+        }
     }
 
-    // Navigation Setup
+    initializeSearch() {
+        const searchBtn = document.querySelector('.search-btn');
+        const searchOverlay = document.querySelector('.search-overlay');
+        const closeSearch = document.querySelector('.close-search');
+        const searchInput = document.querySelector('.search-input');
+        const searchResults = document.querySelector('.search-results');
+
+        if (searchBtn && searchOverlay && closeSearch && searchInput && searchResults) {
+            searchBtn.addEventListener('click', () => {
+                searchOverlay.classList.remove('hidden');
+                searchInput.focus();
+            });
+
+            closeSearch.addEventListener('click', () => {
+                searchOverlay.classList.add('hidden');
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                if (query.length < 2) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+                // Add loading state
+                searchResults.innerHTML = '<div class="loading"></div>';
+                // Simulate search (replace with actual search logic)
+                setTimeout(() => {
+                    searchResults.innerHTML = `
+                        <div class="search-result">
+                            <h4>Search results for: ${query}</h4>
+                            <p>Feature coming soon...</p>
+                        </div>
+                    `;
+                }, 500);
+            });
+        }
+    }
+
     setupNavigation() {
         console.log('Setting up navigation...');
+        
+        // Get navigation elements
         const navButtons = document.querySelectorAll('.nav-btn');
         const heroContainer = document.querySelector('.hero-container');
         const contentSections = document.querySelectorAll('.content-section');
         const learnMoreBtn = document.getElementById('learnMoreBtn');
-
-        // Navigation function
-        const navigateToSection = (section) => {
-            console.log('Navigating to section:', section);
+        
+        // Function to show a section
+        const showSection = (sectionId) => {
+            console.log('Showing section:', sectionId);
             
-            // Remove active class from all nav buttons
-            navButtons.forEach(btn => btn.classList.remove('active'));
+            // Update nav buttons
+            navButtons.forEach(btn => {
+                if (btn.dataset.section === sectionId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
             
-            // Add active class to corresponding nav button
-            const correspondingBtn = document.querySelector(`.nav-btn[data-section="${section}"]`);
-            if (correspondingBtn) {
-                correspondingBtn.classList.add('active');
-            }
-
-            // Handle section visibility
-            if (section === 'home') {
+            // Show/hide sections
+            if (sectionId === 'home') {
+                if (heroContainer) {
                 heroContainer.style.display = 'flex';
-                contentSections.forEach(s => {
-                    s.style.display = 'none';
-                    s.classList.add('hidden');
+                }
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                    section.classList.add('hidden');
                 });
             } else {
+                if (heroContainer) {
                 heroContainer.style.display = 'none';
-                contentSections.forEach(s => {
-                    if (s.id === section) {
-                        console.log(`Showing section: ${section}`);
-                        s.style.display = 'flex';
-                        s.classList.remove('hidden');
-                        // Initialize battle arena if this is the battle section
-                        if (section === 'battle-arena') {
-                            console.log('Initializing battle arena...');
-                            // Small delay to ensure DOM is ready
-                            setTimeout(() => {
-                                this.initializeBattleArena();
-                                this.initializeBattle();
-                                this.initializeVotingSystem();
-                                this.initializeReactions();
-                                this.initializeSpectatorMode();
-                                this.initializeVerseInput();
-                            }, 100);
+                }
+                contentSections.forEach(section => {
+                    if (section.id === sectionId) {
+                        section.style.display = 'flex';
+                        section.classList.remove('hidden');
+                        
+                        // Initialize battle arena if needed
+                        if (sectionId === 'battle-arena') {
+                            this.initializeBattleArena();
+                            this.initializeBattle();
+                            this.initializeVotingSystem();
+                            this.initializeReactions();
+                            this.initializeSpectatorMode();
+                            this.initializeVerseInput();
                         }
                     } else {
-                        s.style.display = 'none';
-                        s.classList.add('hidden');
+                        section.style.display = 'none';
+                        section.classList.add('hidden');
                     }
                 });
             }
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-
-        // Handle navigation buttons
+        
+        // Add click handlers
         navButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 const section = button.dataset.section;
-                console.log('Nav button clicked:', section);
-                navigateToSection(section);
+                showSection(section);
             });
         });
-
+        
         // Handle Learn More button
         if (learnMoreBtn) {
             learnMoreBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const section = learnMoreBtn.dataset.section;
-                navigateToSection(section);
+                showSection('about');
             });
         }
-
-        // Handle Join Button in About Section
+        
+        // Handle Join button
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('join-btn')) {
                 e.preventDefault();
-                navigateToSection('battle-arena');
+                showSection('battle-arena');
             }
         });
+        
+        // Return the showSection function so it can be used elsewhere
+        return showSection;
+    }
 
-        // Handle card navigation items
-        const cardNavItems = document.querySelectorAll('.card-nav .nav-btn');
-        cardNavItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+    // Initialize Spectator Mode
+    initializeSpectatorMode() {
+        const spectatorToggle = document.querySelector('.spectator-toggle');
+        
+        if (spectatorToggle) {
+            spectatorToggle.addEventListener('click', () => {
+                this.isSpectator = !this.isSpectator;
+                spectatorToggle.classList.toggle('active', this.isSpectator);
                 
-                const parentNav = item.closest('.card-nav');
-                if (parentNav) {
-                    parentNav.querySelectorAll('.nav-item').forEach(navItem => {
-                        navItem.classList.remove('active');
+                // Get all interactive elements
+                const verseInputs = document.querySelectorAll('.verse-input');
+                const suggestionLines = document.querySelectorAll('.suggestion-line');
+                const clearButtons = document.querySelectorAll('.clear-btn');
+                const previewButtons = document.querySelectorAll('.preview-btn');
+                const convertButtons = document.querySelectorAll('.convert-btn');
+                const voiceSelects = document.querySelectorAll('.voice-select');
+                const avatarOverlays = document.querySelectorAll('.avatar-overlay');
+                const categoryButtons = document.querySelectorAll('.category-btn');
+                
+                if (this.isSpectator) {
+                    // Disable battle interaction elements
+                    verseInputs.forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.5';
+                        input.style.cursor = 'not-allowed';
                     });
-                    item.classList.add('active');
+                    
+                    suggestionLines.forEach(line => {
+                        line.setAttribute('draggable', 'false');
+                        line.style.cursor = 'not-allowed';
+                        line.style.opacity = '0.5';
+                    });
+                    
+                    clearButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                    
+                    previewButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                    
+                    convertButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                    
+                    voiceSelects.forEach(select => {
+                        select.disabled = true;
+                        select.style.opacity = '0.5';
+                        select.style.cursor = 'not-allowed';
+                    });
+                    
+                    avatarOverlays.forEach(overlay => {
+                        overlay.style.display = 'none';
+                    });
+                    
+                    categoryButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                    
+                    this.showNotification('Spectator mode enabled - Vote and comment only 👀');
+                } else {
+                    // Re-enable all interactive elements
+                    verseInputs.forEach(input => {
+                        input.disabled = false;
+                        input.style.opacity = '1';
+                        input.style.cursor = 'text';
+                    });
+                    
+                    suggestionLines.forEach(line => {
+                        line.setAttribute('draggable', 'true');
+                        line.style.cursor = 'grab';
+                        line.style.opacity = '1';
+                    });
+                    
+                    clearButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                    
+                    previewButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                    
+                    convertButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                    
+                    voiceSelects.forEach(select => {
+                        select.disabled = false;
+                        select.style.opacity = '1';
+                        select.style.cursor = 'pointer';
+                    });
+                    
+                    avatarOverlays.forEach(overlay => {
+                        overlay.style.display = 'flex';
+                    });
+                    
+                    categoryButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                    
+                    this.showNotification('Spectator mode disabled - Full access mode 🎤');
+                }
+            });
+        }
+    }
+
+    // Initialize Comment System
+    initializeCommentSystem() {
+        const commentsContainer = document.querySelector('.comments-container');
+        const commentInput = document.querySelector('.comment-input');
+        const postButton = document.querySelector('.post-comment-btn');
+
+        if (!commentsContainer || !commentInput || !postButton) {
+            console.error('Comment system elements not found');
+            return;
+        }
+
+        // Create a container for the comment list if it doesn't exist
+        let commentList = commentsContainer.querySelector('.comment-list');
+        if (!commentList) {
+            commentList = document.createElement('div');
+            commentList.className = 'comment-list';
+            commentsContainer.appendChild(commentList);
+        }
+
+        // Handle comment posting
+        postButton.addEventListener('click', () => {
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText) {
+                this.showNotification('Please write something first! 📝');
+                return;
+            }
+
+            // Create comment element
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment-box';
+            
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            commentElement.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-author">User</span>
+                    <span class="comment-time">${timestamp}</span>
+                </div>
+                <div class="comment-text">${commentText}</div>
+                <div class="comment-actions">
+                    <button class="like-btn">👍 <span class="like-count">0</span></button>
+                    <button class="reply-btn">↩️ Reply</button>
+                </div>
+            `;
+
+            // Add like functionality
+            const likeBtn = commentElement.querySelector('.like-btn');
+            const likeCount = likeBtn.querySelector('.like-count');
+            let likes = 0;
+            
+            likeBtn.addEventListener('click', () => {
+                likes++;
+                likeCount.textContent = likes;
+                this.showNotification('Comment liked! 👍');
+            });
+
+            // Add to comment list
+            commentList.insertBefore(commentElement, commentList.firstChild);
+            
+            // Clear input
+            commentInput.value = '';
+            
+            // Show notification
+            this.showNotification('Comment posted! 💬');
+
+            // Add animation
+            commentElement.style.opacity = '0';
+            commentElement.style.transform = 'translateY(-10px)';
+            requestAnimationFrame(() => {
+                commentElement.style.transition = 'all 0.3s ease';
+                commentElement.style.opacity = '1';
+                commentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add some sample comments if empty
+        if (commentList.children.length === 0) {
+            const sampleComments = [
+                { author: 'RapFan123', text: 'This battle is 🔥', time: '5m ago' },
+                { author: 'BeatMaster', text: 'Both rappers are killing it!', time: '10m ago' }
+            ];
+
+            sampleComments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment-box';
+                commentElement.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author">${comment.author}</span>
+                        <span class="comment-time">${comment.time}</span>
+                    </div>
+                    <div class="comment-text">${comment.text}</div>
+                    <div class="comment-actions">
+                        <button class="like-btn">👍 <span class="like-count">0</span></button>
+                        <button class="reply-btn">↩️ Reply</button>
+                    </div>
+                `;
+                commentList.appendChild(commentElement);
+            });
+        }
+
+        // Add styles for comments
+        const style = document.createElement('style');
+        style.textContent = `
+            .comment-box {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+                color: #fff;
+                backdrop-filter: blur(5px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .comment-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                font-size: 0.9em;
+            }
+            .comment-author {
+                font-weight: bold;
+                color: #ff8c00;
+            }
+            .comment-time {
+                color: rgba(255, 255, 255, 0.6);
+            }
+            .comment-text {
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+            .comment-actions {
+                display: flex;
+                gap: 12px;
+            }
+            .comment-actions button {
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.8);
+                cursor: pointer;
+                padding: 4px 8px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+            .comment-actions button:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Initialize Verse Input
+    initializeVerseInput() {
+        console.log('Initializing verse input system...');
+        
+        // Get all verse inputs
+        const leftInput = document.getElementById('leftRapText');
+        const rightInput = document.getElementById('rightRapText');
+        
+        // Get preview containers
+        const leftPreviewContainer = document.querySelector('.rapper-side.left .rap-verse-container');
+        const rightPreviewContainer = document.querySelector('.rapper-side.right .rap-verse-container');
+        
+        // Get all suggestion lines
+        const suggestionLines = document.querySelectorAll('.suggestion-line');
+        
+        console.log('Found rap text inputs:', {
+            left: !!leftInput,
+            right: !!rightInput,
+            leftPreview: !!leftPreviewContainer,
+            rightPreview: !!rightPreviewContainer,
+            suggestions: suggestionLines.length
+        });
+        
+        // Initialize suggestion lines for drag and drop
+        suggestionLines.forEach(line => {
+            // Make the line draggable and add necessary attributes
+            line.setAttribute('draggable', 'true');
+            line.setAttribute('role', 'button');
+            line.setAttribute('tabindex', '0');
+            
+            // Add visual feedback for dragging
+            line.addEventListener('dragstart', (e) => {
+                console.log('Drag started:', line.textContent.trim());
+                line.classList.add('dragging');
+                
+                // Set the drag data
+                const text = line.textContent.trim();
+                e.dataTransfer.setData('text/plain', text);
+                e.dataTransfer.effectAllowed = 'copy';
+                
+                // Create a custom drag image
+                const dragImage = line.cloneNode(true);
+                dragImage.style.cssText = `
+                    position: absolute;
+                    top: -1000px;
+                    background: rgba(255, 140, 0, 0.2);
+                    padding: 10px;
+                    border-radius: 5px;
+                    pointer-events: none;
+                    width: ${line.offsetWidth}px;
+                `;
+                document.body.appendChild(dragImage);
+                e.dataTransfer.setDragImage(dragImage, 0, 0);
+                setTimeout(() => dragImage.remove(), 0);
+                
+                // Style all verse inputs to show they're valid drop targets
+                [leftInput, rightInput].forEach(input => {
+                    if (input && !this.isSpectator) {
+                        input.classList.add('valid-drop-target');
+                    }
+                });
+            });
+            
+            line.addEventListener('dragend', () => {
+                line.classList.remove('dragging');
+                
+                // Remove drop target styling
+                [leftInput, rightInput].forEach(input => {
+                    if (input) {
+                        input.classList.remove('valid-drop-target');
+                        input.classList.remove('drag-over');
+                    }
+                });
+            });
+            
+            // Add hover effects
+            line.addEventListener('mouseenter', () => {
+                if (!this.isSpectator) {
+                    line.style.transform = 'scale(1.02)';
+                    line.style.cursor = 'grab';
+                    line.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                }
+            });
+            
+            line.addEventListener('mouseleave', () => {
+                line.style.transform = 'scale(1)';
+                line.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            });
+            
+            // Add click-to-copy functionality
+            line.addEventListener('click', () => {
+                if (this.isSpectator) {
+                    this.showNotification('Cannot add lines in spectator mode 👀');
+                    return;
+                }
+                
+                const text = line.textContent.trim();
+                // Find the nearest verse input
+                const nearestInput = line.closest('.rapper-side')?.querySelector('.verse-input') || leftInput;
+                
+                if (nearestInput) {
+                    if (nearestInput.value && !nearestInput.value.endsWith('\n')) {
+                        nearestInput.value += '\n';
+                    }
+                    nearestInput.value += text;
+                    
+                    // Update preview if visible
+                    const side = nearestInput.id.includes('left') ? 'left' : 'right';
+                    const previewContainer = side === 'left' ? leftPreviewContainer : rightPreviewContainer;
+                    const versePreview = previewContainer?.querySelector('.verse-preview');
+                    if (versePreview) {
+                        versePreview.querySelector('pre').textContent = nearestInput.value;
+                    }
+                    
+                    // Add visual feedback
+                    line.style.backgroundColor = 'rgba(255, 140, 0, 0.3)';
+                    setTimeout(() => {
+                        line.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    }, 300);
+                    
+                    this.showNotification('Line added! Click to edit ✍️');
+                }
+            });
+        });
+        
+        // Set up clear buttons
+        const clearButtons = document.querySelectorAll('.clear-btn');
+        console.log('Found clear buttons:', clearButtons.length);
+        
+        clearButtons.forEach(button => {
+            console.log('Setting up clear button:', button.id);
+            button.addEventListener('click', () => {
+                const side = button.id.includes('left') ? 'left' : 'right';
+                const input = side === 'left' ? leftInput : rightInput;
+                const previewContainer = side === 'left' ? leftPreviewContainer : rightPreviewContainer;
+                
+                console.log(`Clearing ${side} rap text:`, !!input);
+                if (input) {
+                    input.value = '';
+                    if (previewContainer) {
+                        previewContainer.innerHTML = '';
+                    }
+                    this.showNotification('Verse cleared! 🗑️');
+                } else {
+                    console.error(`Could not find ${side}RapText input`);
                 }
             });
         });
 
-        // Audio controls for navigation
-        const musicPlayer = document.getElementById('musicPlayer');
-        if (musicPlayer) {
-            learnMoreBtn.addEventListener('click', () => {
-                musicPlayer.pause(); // Stop any playing music when navigating
-            });
-        }
-    }
-
-    // Auth Buttons Setup
-    setupAuthButtons() {
-        const authButtons = document.querySelectorAll('.auth-btn, .login-btn, .signup-btn');
+        // Set up preview buttons
+        const previewButtons = document.querySelectorAll('.preview-btn');
+        console.log('Found preview buttons:', previewButtons.length);
         
-        authButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
+        previewButtons.forEach(button => {
+            console.log('Setting up preview button:', button.id);
+            button.addEventListener('click', () => {
+                const side = button.id.includes('left') ? 'left' : 'right';
+                const input = side === 'left' ? leftInput : rightInput;
+                const previewContainer = side === 'left' ? leftPreviewContainer : rightPreviewContainer;
+                
+                console.log(`Previewing ${side} rap text:`, !!input, input?.value);
+                if (input && input.value.trim()) {
+                    if (previewContainer) {
+                        // Create verse preview element
+                        previewContainer.innerHTML = `
+                            <div class="verse-preview">
+                                <pre>${input.value}</pre>
+                            </div>
+                        `;
+                        
+                        // Style the preview
+                        const versePreview = previewContainer.querySelector('.verse-preview');
+                        versePreview.style.cssText = `
+                            background: rgba(0, 0, 0, 0.3);
+                            border-radius: 10px;
+                            padding: 15px;
+                            margin: 10px 0;
+                            width: 100%;
+                        `;
+        
+                        // Style the pre tag
+                        const pre = versePreview.querySelector('pre');
+                        pre.style.cssText = `
+                            white-space: pre-wrap;
+                            word-wrap: break-word;
+                            margin: 0;
+                            font-family: 'Courier New', monospace;
+                            color: white;
+                            font-size: 14px;
+                            line-height: 1.5;
+                        `;
+                        
+                        this.showNotification('Verse previewed! 👀');
+                    } else {
+                        console.error(`Could not find preview container for ${side} side`);
+                    }
+                } else {
+                    if (previewContainer) {
+                        previewContainer.innerHTML = '';
+                    }
+                    this.showNotification('No verse to preview! Write something first 📝');
+                }
+            });
+        });
+        
+        // Set up drag and drop for verse inputs
+        [leftInput, rightInput].forEach(input => {
+            if (!input) return;
+            
+            // Add visual cues for drag targets
+            input.addEventListener('dragenter', (e) => {
+                e.preventDefault();
+                if (!this.isSpectator) {
+                    input.classList.add('drag-over');
+                    input.style.backgroundColor = 'rgba(255, 140, 0, 0.1)';
+                }
+            });
+            
+            input.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (!this.isSpectator) {
+                    e.dataTransfer.dropEffect = 'copy';
+                input.classList.add('drag-over');
+                }
+            });
+            
+            input.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                input.classList.remove('drag-over');
+                input.style.backgroundColor = '';
+            });
+            
+            input.addEventListener('drop', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Add visual feedback
-                button.style.transform = 'translateY(-2px) scale(0.95)';
-                setTimeout(() => {
-                    button.style.transform = '';
-                }, 150);
+                input.classList.remove('drag-over');
+                input.classList.remove('valid-drop-target');
+                input.style.backgroundColor = '';
                 
-                // Show notification
-                this.showNotification('Functionality coming soon!');
+                if (this.isSpectator) {
+                    this.showNotification('Adding verses is disabled in spectator mode');
+                    return;
+                }
+                
+                const verse = e.dataTransfer.getData('text/plain');
+                console.log('Dropped verse:', verse);
+                
+                if (!verse) {
+                    console.error('No verse data found in drop event');
+                    return;
+                }
+                
+                // Add newline if needed
+                if (input.value && !input.value.endsWith('\n')) {
+                    input.value += '\n';
+                }
+                input.value += verse;
+                
+                // Also update preview if it exists
+                const side = input.id.includes('left') ? 'left' : 'right';
+                const previewContainer = side === 'left' ? leftPreviewContainer : rightPreviewContainer;
+                if (previewContainer) {
+                    const versePreview = previewContainer.querySelector('.verse-preview');
+                    if (versePreview) {
+                        versePreview.querySelector('pre').textContent = input.value;
+                    }
+                }
+                
+                // Add drop animation
+                const dropAnimation = document.createElement('div');
+                dropAnimation.className = 'drop-animation';
+                dropAnimation.style.cssText = `
+                    position: absolute;
+                    top: ${e.offsetY}px;
+                    left: ${e.offsetX}px;
+                    width: 20px;
+                    height: 20px;
+                    background: rgba(255, 140, 0, 0.5);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: dropRipple 0.6s ease-out;
+                `;
+                input.appendChild(dropAnimation);
+                setTimeout(() => dropAnimation.remove(), 600);
+                
+                // Focus the input after dropping
+                input.focus();
+                
+                this.showNotification('Verse added! 🎤');
             });
         });
+        
+        // Add styles for drag and drop
+        const style = document.createElement('style');
+        style.textContent = `
+            .suggestion-line {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 12px;
+                margin: 8px 0;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                cursor: grab;
+                user-select: none;
+                position: relative;
+            }
+            
+            .suggestion-line:hover {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.2);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+            
+            .suggestion-line.dragging {
+                opacity: 0.5;
+                cursor: grabbing;
+                transform: scale(0.95);
+            }
+            
+            .verse-input.valid-drop-target {
+                border-color: rgba(255, 140, 0, 0.5);
+                box-shadow: 0 0 10px rgba(255, 140, 0, 0.2);
+            }
+            
+            .verse-input.drag-over {
+                border-color: rgba(255, 140, 0, 1);
+                background: rgba(255, 140, 0, 0.1);
+                transform: scale(1.01);
+            }
+            
+            .suggestion-category {
+                margin-bottom: 20px;
+            }
+            
+            .category-label {
+                display: block;
+                margin-bottom: 10px;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 14px;
+                font-weight: 500;
+            }
+            
+            @keyframes dropRipple {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(20);
+                    opacity: 0;
+                }
+            }
+            
+            .suggestion-line::before {
+                content: '⋮';
+                position: absolute;
+                left: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: rgba(255, 255, 255, 0.5);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            
+            .suggestion-line:hover::before {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
-    // Card Navigation Setup
-    setupCardNavigation() {
-        const cardNavItems = document.querySelectorAll('[data-category="support"] .card-nav .nav-item');
-        
-        cardNavItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                // Remove active class from all items
-                cardNavItems.forEach(navItem => navItem.classList.remove('active'));
-                // Add active class to clicked item
-                e.target.classList.add('active');
-            });
-        });
-    }
-
-    // Show hero section (Home page)
-    showHeroSection() {
-        const heroContainer = document.querySelector('.hero-container');
-        const contentSections = document.querySelectorAll('.content-section');
-        
-        if (heroContainer) {
-            heroContainer.style.display = 'flex';
+    // Utility function to show notifications
+    showNotification(message, type = 'info') {
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
         }
         
-        contentSections.forEach(section => {
-            section.classList.remove('active');
-            section.classList.add('hidden');
-            section.style.display = 'none';
-        });
-    }
-
-    // Show content section (About, Tracks, etc.)
-    showContentSection(sectionName) {
-        const heroContainer = document.querySelector('.hero-container');
-        const contentSections = document.querySelectorAll('.content-section');
-        
-        // Hide hero section
-        if (heroContainer) {
-            heroContainer.style.display = 'none';
-        }
-        
-        // Hide all content sections first
-        contentSections.forEach(section => {
-            section.classList.remove('active');
-            section.classList.add('hidden');
-            section.style.display = 'none';
-        });
-        
-        // Show target section
-        const targetSection = document.getElementById(sectionName.replace(' ', '-')) || 
-                            document.querySelector(`[data-section="${sectionName}"]`) ||
-                            document.querySelector(`.${sectionName}-section`);
-        
-        if (targetSection) {
-            targetSection.classList.remove('hidden');
-            targetSection.classList.add('active');
-            targetSection.style.display = 'block';
-        } else {
-            // Create section if it doesn't exist
-            this.createContentSection(sectionName);
-        }
-    }
-
-    // Create content section dynamically
-    createContentSection(sectionName) {
-        const mainContent = document.querySelector('.main-content') || document.body;
-        
-        const section = document.createElement('div');
-        section.id = sectionName.replace(' ', '-');
-        section.className = 'content-section active';
-        section.setAttribute('data-section', sectionName);
-        
-        // Add content based on section type
-        const content = this.getContentForSection(sectionName);
-        section.innerHTML = content;
-        
-        // Add styles
-        section.style.cssText = `
-            display: block;
-            min-height: 100vh;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.9);
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 10000;
+            font-size: 14px;
+            transform: translateY(-20px);
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
+            transition: all 0.3s ease;
         `;
         
-        mainContent.appendChild(section);
+        document.body.appendChild(notification);
         
-        // Animate in
         setTimeout(() => {
-            section.style.opacity = '1';
-            section.style.transform = 'translateY(0)';
-        }, 100);
-    }
-
-    // Get content for different sections
-    getContentForSection(sectionName) {
-        switch(sectionName.toLowerCase()) {
-            case 'about':
-                return `
-                    <div class="section-content">
-                        <h1 style="font-size: 3rem; margin-bottom: 2rem; color: #ff6b35;">About Reluxe</h1>
-                        <div style="max-width: 800px; line-height: 1.8; font-size: 1.1rem;">
-                            <p style="margin-bottom: 2rem;">
-                                Reluxe is revolutionizing the music industry by creating a platform where artists can truly connect with their audience and earn what they deserve.
-                            </p>
-                            <p style="margin-bottom: 2rem;">
-                                Our mission is to empower independent artists by providing them with the tools, exposure, and financial opportunities they need to thrive in today's digital landscape.
-                            </p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
-                                <div style="padding: 1.5rem; background: rgba(255, 107, 53, 0.1); border-radius: 15px; border: 1px solid rgba(255, 107, 53, 0.3);">
-                                    <h3 style="color: #ff6b35; margin-bottom: 1rem;">Our Vision</h3>
-                                    <p>To create a world where every artist has the opportunity to be heard and fairly compensated for their creativity.</p>
-                                </div>
-                                <div style="padding: 1.5rem; background: rgba(247, 147, 30, 0.1); border-radius: 15px; border: 1px solid rgba(247, 147, 30, 0.3);">
-                                    <h3 style="color: #f7931e; margin-bottom: 1rem;">Our Mission</h3>
-                                    <p>Empowering artists through technology, community, and innovative revenue streams.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            
-            case 'tracks':
-                return `
-                    <div class="section-content">
-                        <h1 style="font-size: 3rem; margin-bottom: 2rem; color: #ff6b35;">Featured Tracks</h1>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                            ${this.generateTrackCards()}
-                        </div>
-                    </div>
-                `;
-            
-            case 'how-it-works':
-                return `
-                    <div class="section-content">
-                        <h1 style="font-size: 3rem; margin-bottom: 2rem; color: #ff6b35;">How It Works</h1>
-                        <div style="max-width: 1000px;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 3rem;">
-                                <div style="text-align: center; padding: 2rem;">
-                                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">1</div>
-                                    <h3 style="color: #ff6b35; margin-bottom: 1rem;">Upload Your Music</h3>
-                                    <p>Share your tracks with our community and get discovered by music lovers worldwide.</p>
-                                </div>
-                                <div style="text-align: center; padding: 2rem;">
-                                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">2</div>
-                                    <h3 style="color: #ff6b35; margin-bottom: 1rem;">Build Your Audience</h3>
-                                    <p>Connect with fans, collaborate with other artists, and grow your following organically.</p>
-                                </div>
-                                <div style="text-align: center; padding: 2rem;">
-                                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">3</div>
-                                    <h3 style="color: #ff6b35; margin-bottom: 1rem;">Earn Revenue</h3>
-                                    <p>Get paid fairly for your streams, downloads, and live performances through our platform.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            
-            default:
-                return `
-                    <div class="section-content">
-                        <h1 style="font-size: 3rem; margin-bottom: 2rem; color: #ff6b35;">${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}</h1>
-                        <p style="font-size: 1.2rem; opacity: 0.8;">This section is coming soon! We're working hard to bring you amazing content.</p>
-                    </div>
-                `;
-        }
-    }
-
-    // Generate track cards for tracks section
-    generateTrackCards() {
-        const tracks = [
-            { title: "Midnight Vibes", artist: "Luna Beat", genre: "Electronic", plays: "1.2M" },
-            { title: "City Lights", artist: "Urban Flow", genre: "Hip Hop", plays: "890K" },
-            { title: "Ocean Dreams", artist: "Wave Rider", genre: "Ambient", plays: "2.1M" },
-            { title: "Neon Rush", artist: "Cyber Pulse", genre: "Synthwave", plays: "745K" },
-            { title: "Forest Whispers", artist: "Nature Sound", genre: "Acoustic", plays: "1.5M" },
-            { title: "Bass Drop", artist: "Heavy Beats", genre: "Dubstep", plays: "980K" }
-        ];
-
-        return tracks.map(track => `
-            <div class="track-card" style="
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 15px;
-                padding: 1.5rem;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                transition: all 0.3s ease;
-                cursor: pointer;
-            " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(255, 107, 53, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <div style="width: 100%; height: 200px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 10px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">♪</div>
-                <h3 style="color: white; margin-bottom: 0.5rem;">${track.title}</h3>
-                <p style="color: #ff6b35; margin-bottom: 0.5rem;">${track.artist}</p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">${track.genre}</span>
-                    <span style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">${track.plays} plays</span>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Music Player Controls
-    setupMusicControls() {
-        // Play/Pause buttons
-        const playButtons = document.querySelectorAll('.play-btn, .pause-btn');
-        playButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.togglePlayback();
-            });
-        });
-
-        // Volume control
-        const volumeSlider = document.querySelector('.volume-slider');
-        if (volumeSlider) {
-            volumeSlider.addEventListener('input', (e) => {
-                this.setVolume(e.target.value / 100);
-            });
-        }
-
-        // Progress bar
-        const progressBar = document.querySelector('.progress-bar');
-        if (progressBar) {
-            progressBar.addEventListener('click', (e) => {
-                const clickPosition = e.offsetX / progressBar.offsetWidth;
-                this.seekTo(clickPosition);
-            });
-        }
-    }
-
-    // Music Player Functions
-    togglePlayback() {
-        this.isPlaying = !this.isPlaying;
+            notification.style.transform = 'translateY(0)';
+            notification.style.opacity = '1';
+        }, 10);
         
-        const playButtons = document.querySelectorAll('.play-btn');
-        const pauseButtons = document.querySelectorAll('.pause-btn');
-        
-        if (this.isPlaying) {
-            playButtons.forEach(btn => btn.style.display = 'none');
-            pauseButtons.forEach(btn => btn.style.display = 'block');
-            this.startProgressAnimation();
-        } else {
-            playButtons.forEach(btn => btn.style.display = 'block');
-            pauseButtons.forEach(btn => btn.style.display = 'none');
-            this.stopProgressAnimation();
-        }
-    }
-
-    setVolume(volume) {
-        this.volume = Math.max(0, Math.min(1, volume));
-        console.log(`Volume set to: ${this.volume * 100}%`);
-    }
-
-    seekTo(position) {
-        this.progress = Math.max(0, Math.min(1, position));
-        this.updateProgressBar();
-        console.log(`Seeking to: ${this.progress * 100}%`);
-    }
-
-    startProgressAnimation() {
-        if (this.progressInterval) {
-            clearInterval(this.progressInterval);
-        }
-        
-        this.progressInterval = setInterval(() => {
-            this.progress += 0.01;
-            if (this.progress >= 1) {
-                this.progress = 0;
-                this.togglePlayback(); // Auto-stop at end
-            }
-            this.updateProgressBar();
-        }, 1000);
-    }
-
-    stopProgressAnimation() {
-        if (this.progressInterval) {
-            clearInterval(this.progressInterval);
-        }
-    }
-
-    updateProgressBar() {
-        const progressBars = document.querySelectorAll('.progress-fill');
-        progressBars.forEach(bar => {
-            bar.style.width = `${this.progress * 100}%`;
-        });
+        setTimeout(() => {
+            notification.style.transform = 'translateY(-20px)';
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
     }
 
     // Animation Initialization
@@ -483,6 +910,27 @@ class ReluxePlatform {
                 element.style.opacity = '1';
                 element.style.transform = 'translateX(0)';
             }, index * 300 + 500);
+        });
+
+        // Feature Cards Animation
+        const featureCards = document.querySelectorAll('.feature-card');
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.visibility = 'visible';
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        featureCards.forEach(card => {
+            card.style.visibility = 'hidden';
+            cardObserver.observe(card);
         });
     }
 
@@ -577,53 +1025,6 @@ class ReluxePlatform {
         // Implement search logic here
     }
 
-    // Notification System (simplified version from your working code)
-    showNotification(message, type = 'info') {
-        // Remove existing notifications
-        const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
-        
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 80px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 10000;
-            font-size: 14px;
-            transform: translateY(-20px);
-            opacity: 0;
-            transition: all 0.3s ease;
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateY(0)';
-            notification.style.opacity = '1';
-        }, 10);
-        
-        // Remove after delay
-        setTimeout(() => {
-            notification.style.transform = 'translateY(-20px)';
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 3000);
-    }
-
     // Voting system properties
     voteData = {
         leftCount: 0,
@@ -634,93 +1035,67 @@ class ReluxePlatform {
 
     // Initialize voting system
     initializeVotingSystem() {
-        const slider = document.querySelector('.vote-slider');
-        const percentage = document.querySelector('.vote-percentage');
-        const indicatorFill = document.querySelector('.vote-indicator-fill');
-        const leftCount = document.querySelector('.vote-count-left');
-        const rightCount = document.querySelector('.vote-count-right');
+        console.log('Initializing voting system...');
+        
         const leftBtn = document.querySelector('.vote-btn-left');
         const rightBtn = document.querySelector('.vote-btn-right');
-
-        if (slider) {
-            // Update percentage display and indicator on slider change
-            slider.addEventListener('input', (e) => {
-                const value = e.target.value;
-                percentage.textContent = `${value}%`;
-                percentage.style.left = `${value}%`;
-                indicatorFill.style.width = `${value}%`;
-            });
-        }
-
-        // Handle vote buttons
-        if (leftBtn && rightBtn) {
-            leftBtn.addEventListener('click', () => this.handleVote('left'));
-            rightBtn.addEventListener('click', () => this.handleVote('right'));
-        }
-    }
-
-    // Handle voting
-    handleVote(side) {
-        if (this.isSpectator) {
-            this.showNotification('Voting is disabled in spectator mode');
-            return;
-        }
-
-        if (this.voteData.hasVoted) {
-            this.showNotification('You have already voted!');
-            return;
-        }
-
-        // Update vote counts
-        if (side === 'left') {
-            this.voteData.leftCount++;
-        } else {
-            this.voteData.rightCount++;
-        }
-        this.voteData.totalVotes++;
-        this.voteData.hasVoted = true;
-
-        // Calculate new percentages
-        const leftPercentage = Math.round((this.voteData.leftCount / this.voteData.totalVotes) * 100);
-        const rightPercentage = 100 - leftPercentage;
-
-        // Update UI
-        const slider = document.querySelector('.vote-slider');
-        const percentage = document.querySelector('.vote-percentage');
-        const indicatorFill = document.querySelector('.vote-indicator-fill');
         const leftCount = document.querySelector('.vote-count-left');
         const rightCount = document.querySelector('.vote-count-right');
+        const voteIndicator = document.querySelector('.vote-indicator-fill');
 
-        if (slider) slider.value = leftPercentage;
-        if (percentage) {
-            percentage.textContent = `${leftPercentage}%`;
-            percentage.style.left = `${leftPercentage}%`;
+        if (!leftBtn || !rightBtn || !leftCount || !rightCount || !voteIndicator) {
+            console.error('Voting elements not found');
+            return;
         }
-        if (indicatorFill) indicatorFill.style.width = `${leftPercentage}%`;
-        if (leftCount) leftCount.textContent = this.voteData.leftCount;
-        if (rightCount) rightCount.textContent = this.voteData.rightCount;
 
-        // Disable vote buttons
-        const buttons = document.querySelectorAll('.vote-btn-left, .vote-btn-right');
-        buttons.forEach(btn => {
-            btn.style.opacity = '0.5';
-            btn.style.cursor = 'not-allowed';
-        });
+        // Initialize vote counts
+        let votes = {
+            left: 0,
+            right: 0,
+            hasVoted: false
+        };
 
-        // Show vote confirmation
-        this.showNotification(`Vote recorded for ${side === 'left' ? 'DHANJI' : 'KR$NA'}!`);
+        // Update vote display
+        const updateVoteDisplay = () => {
+            leftCount.textContent = votes.left;
+            rightCount.textContent = votes.right;
+            
+            const total = votes.left + votes.right;
+            const leftPercentage = total > 0 ? (votes.left / total) * 100 : 50;
+            voteIndicator.style.width = `${leftPercentage}%`;
+        };
 
-        // Add voting animation
-        const votedBtn = side === 'left' ? 
-            document.querySelector('.vote-btn-left') : 
-            document.querySelector('.vote-btn-right');
-        
-        if (votedBtn) {
-            votedBtn.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                votedBtn.style.transform = 'scale(1)';
-            }, 200);
-        }
+        // Handle voting
+        const handleVote = (side) => {
+            if (votes.hasVoted) {
+                this.showNotification('You have already voted! 🎭');
+                return;
+            }
+
+            if (side === 'left') {
+                votes.left++;
+                this.showNotification(`Voted for ${leftBtn.textContent.split(' ')[2]}! 🎤`);
+            } else {
+                votes.right++;
+                this.showNotification(`Voted for ${rightBtn.textContent.split(' ')[2]}! 🎤`);
+            }
+
+            votes.hasVoted = true;
+            updateVoteDisplay();
+
+            // Disable buttons
+            leftBtn.style.opacity = '0.5';
+            rightBtn.style.opacity = '0.5';
+            leftBtn.style.cursor = 'not-allowed';
+            rightBtn.style.cursor = 'not-allowed';
+        };
+
+        // Add click handlers
+        leftBtn.addEventListener('click', () => handleVote('left'));
+        rightBtn.addEventListener('click', () => handleVote('right'));
+
+        // Initialize display
+        updateVoteDisplay();
     }
 
     // Reaction system properties
@@ -786,594 +1161,517 @@ class ReluxePlatform {
         }, 200);
     }
 
-    // Update initializeBattleArena to include spectator mode
+    // Initialize voice selections
+    initializeVoiceSelections() {
+        const leftVoiceSelect = document.querySelector('#leftVoiceSelect');
+        const rightVoiceSelect = document.querySelector('#rightVoiceSelect');
+
+        // Set default voices
+        if (leftVoiceSelect) {
+            leftVoiceSelect.value = 'en-IN-rohan';
+            
+            // Add change listener
+            leftVoiceSelect.addEventListener('change', () => {
+                // If voice is changed back to default, maintain it
+                if (!leftVoiceSelect.value) {
+                    leftVoiceSelect.value = 'en-IN-rohan';
+                }
+                console.log('Rapper 1 voice changed to:', leftVoiceSelect.value);
+            });
+        }
+
+        if (rightVoiceSelect) {
+            rightVoiceSelect.value = 'en-IN-aarav';
+            
+            // Add change listener
+            rightVoiceSelect.addEventListener('change', () => {
+                // If voice is changed back to default, maintain it
+                if (!rightVoiceSelect.value) {
+                    rightVoiceSelect.value = 'en-IN-aarav';
+                }
+                console.log('Rapper 2 voice changed to:', rightVoiceSelect.value);
+            });
+        }
+    }
+
+    // Initialize Battle Arena
     initializeBattleArena() {
         console.log('Initializing battle arena...');
-        this.setupRapLibrary();
-        const rapperSides = document.querySelectorAll('.rapper-side');
-        const versusSection = document.querySelector('.versus-section');
-        const startBattleBtn = document.querySelector('.start-battle-btn');
         
-        console.log('Found elements:', {
-            rapperSides: rapperSides.length,
-            versusSection: !!versusSection,
-            startBattleBtn: !!startBattleBtn
-        });
+        // Initialize voice selections first
+        this.initializeVoiceSelections();
         
-        // Reset animations
-        rapperSides.forEach(side => side.classList.remove('animate-in'));
-        if (versusSection) versusSection.classList.remove('animate-in');
-        
-        // Trigger animations with slight delays
-        setTimeout(() => {
-            rapperSides[0]?.classList.add('animate-in');
-        }, 300);
-        
-        setTimeout(() => {
-            if (versusSection) versusSection.classList.add('animate-in');
-        }, 600);
-        
-        setTimeout(() => {
-            rapperSides[1]?.classList.add('animate-in');
-        }, 900);
-
-        // Initialize battle functionality
-        this.initializeBattle();
+        // Initialize rap library
+        this.initializeRapLibrary();
         
         // Initialize voting system
         this.initializeVotingSystem();
-
-        // Initialize reaction system
-        this.initializeReactions();
-
-        // Initialize spectator mode
+        
+        // Initialize other components
         this.initializeSpectatorMode();
-
-        // Initialize verse input system
         this.initializeVerseInput();
-
-        // Add debug click handler to battle button
-        if (startBattleBtn) {
-            startBattleBtn.addEventListener('mousedown', (e) => {
-                console.log('Battle button mousedown:', e);
-            });
-        }
+        this.initializeCommentSystem();
     }
 
-    setupRapLibrary() {
-        const rapCategories = document.querySelector('.rap-categories');
-        if (!rapCategories) return;
+    // Initialize Rap Library
+    initializeRapLibrary() {
+        console.log('Initializing rap library...');
+        
+        // Get all necessary elements
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const leftRapperName = document.querySelector('#rapper1');
+        const rightRapperName = document.querySelector('#rapper2');
+        const leftAvatar = document.querySelector('.rapper-side.left .avatar-image');
+        const rightAvatar = document.querySelector('.rapper-side.right .avatar-image');
+        const suggestionBox = document.querySelector('.suggestions-container');
+        const leftVoiceSelect = document.querySelector('#leftVoiceSelect');
+        const rightVoiceSelect = document.querySelector('#rightVoiceSelect');
 
-        // Event delegation for category buttons
-        rapCategories.addEventListener('click', (e) => {
-            const categoryBtn = e.target.closest('.category-btn');
-            if (!categoryBtn) return;
+        // Set default voices
+        if (leftVoiceSelect) {
+            leftVoiceSelect.value = 'en-IN-rohan';
+            console.log('Set Rapper 1 default voice to Rohan');
+        }
+        if (rightVoiceSelect) {
+            rightVoiceSelect.value = 'en-IN-aarav';
+            console.log('Set Rapper 2 default voice to Aarav');
+        }
 
-            // Remove active class from all buttons
-            const allCategoryBtns = rapCategories.querySelectorAll('.category-btn');
-            allCategoryBtns.forEach(btn => btn.classList.remove('active'));
-
-            // Add active class to clicked button
-            categoryBtn.classList.add('active');
-
-            // Get the category from data attribute
-            const category = categoryBtn.dataset.category;
-            console.log(`Selected category: ${category}`);
-
-            // Here you can add logic to load rap verses based on the selected category
-            this.loadRapVersesByCategory(category);
+        console.log('Found elements:', {
+            categoryButtons: categoryButtons.length,
+            leftRapperName: !!leftRapperName,
+            rightRapperName: !!rightRapperName,
+            leftAvatar: !!leftAvatar,
+            rightAvatar: !!rightAvatar,
+            suggestionBox: !!suggestionBox,
+            leftVoiceSelect: !!leftVoiceSelect,
+            rightVoiceSelect: !!rightVoiceSelect
         });
 
-        // Set initial active state to first button
-        const firstCategoryBtn = rapCategories.querySelector('.category-btn');
-        if (firstCategoryBtn) {
-            firstCategoryBtn.classList.add('active');
-            const initialCategory = firstCategoryBtn.dataset.category;
-            this.loadRapVersesByCategory(initialCategory);
-        }
-    }
-
-    loadRapVersesByCategory(category) {
-        // This method will be used to load rap verses based on the selected category
-        // You can implement the verse loading logic here
-        console.log(`Loading verses for category: ${category}`);
-    }
-
-    // Sample rap verses
-    rapVerses = {
-        rapper1: [
-            "I step in the ring, with flows that sting",
-            "Your rhymes are weak, like a broken wing",
-            "I'm the king of this game, watch me soar",
-            "While you're stuck on the ground, begging for more"
-        ],
-        rapper2: [
-            "You talk about flying, but you're afraid of heights",
-            "Your metaphors are weak, like dim street lights",
-            "I'm the real MVP, the one they admire",
-            "Your career's so cold, it needs a campfire"
-        ]
-    };
-
-    // Typing animation method
-    async typeText(element, text) {
-        element.classList.add('typing');
-        for (let i = 0; i < text.length; i++) {
-            element.textContent += text[i];
-            await new Promise(resolve => setTimeout(resolve, 50)); // Adjust typing speed here
-        }
-        element.classList.remove('typing');
-    }
-
-    // Display rap verse method
-    async displayRapVerse(container, verses, isActiveTurn = false) {
-        container.innerHTML = ''; // Clear previous verses
-        if (isActiveTurn) {
-            container.classList.add('active-turn');
-        }
-
-        for (let verse of verses) {
-            const lineElement = document.createElement('div');
-            lineElement.className = 'rap-line';
-            container.appendChild(lineElement);
-            
-            // Trigger particle effect for each line
-            document.dispatchEvent(new Event('rapLine'));
-            
-            await this.typeText(lineElement, verse);
-            lineElement.classList.add('visible');
-            await new Promise(resolve => setTimeout(resolve, 500)); // Pause between lines
-        }
-
-        if (isActiveTurn) {
-            container.classList.remove('active-turn');
-        }
-    }
-
-    // Battle turn handler
-    async handleBattleTurn(rapperIndex) {
-        if (this.isSpectator) {
-            this.showSpectatorMessage('Watching battle in spectator mode...');
-        }
-        
-        const containers = document.querySelectorAll('.rap-verse-container');
-        const verses = rapperIndex === 0 ? this.rapVerses.rapper1 : this.rapVerses.rapper2;
-        
-        // Clear both containers and remove active states
-        containers.forEach(container => {
-            container.innerHTML = '';
-            container.classList.remove('active-turn');
-        });
-
-        // Add entrance animation to current rapper's container
-        containers[rapperIndex].style.transform = 'translateX(20px)';
-        containers[rapperIndex].style.opacity = '0';
-        
-        // Trigger reflow
-        void containers[rapperIndex].offsetWidth;
-        
-        // Animate in
-        containers[rapperIndex].style.transition = 'all 0.5s ease';
-        containers[rapperIndex].style.transform = 'translateX(0)';
-        containers[rapperIndex].style.opacity = '1';
-
-        // Display verses with typing animation
-        await this.displayRapVerse(containers[rapperIndex], verses, true);
-
-        // Add exit animation
-        containers[rapperIndex].style.transition = 'all 0.5s ease';
-        containers[rapperIndex].style.transform = 'translateX(-20px)';
-        containers[rapperIndex].style.opacity = '0.7';
-    }
-
-    // Initialize battle
-    initializeBattle() {
-        console.log('Initializing Battle...');
-        const startBattleBtn = document.querySelector('.start-battle-btn');
-        const battleTimer = document.querySelector('.battle-timer');
-        const progressFill = document.querySelector('.battle-progress .battle-progress-fill');
-        const turnIndicator = document.querySelector('.rapper-turn-indicator .turn-text');
-        const BATTLE_DURATION = 120; // 2 minutes in seconds
-        let timeLeft = BATTLE_DURATION;
-        let battleInterval;
-
-        // Debug element locations
-        console.log('Element locations:', {
-            startBattleBtn: startBattleBtn?.parentElement?.className,
-            battleTimer: battleTimer?.parentElement?.className,
-            progressFill: progressFill?.parentElement?.className,
-            turnIndicator: turnIndicator?.parentElement?.className
-        });
-
-        // Debug element contents
-        console.log('Element contents:', {
-            startBattleBtn: startBattleBtn?.innerHTML,
-            battleTimer: battleTimer?.innerHTML,
-            progressFill: progressFill?.innerHTML,
-            turnIndicator: turnIndicator?.innerHTML
-        });
-
-        if (!startBattleBtn || !battleTimer || !progressFill || !turnIndicator) {
-            console.error('Missing required elements for battle initialization');
-            this.showNotification('Battle arena not properly initialized. Please refresh the page.');
-            return;
-        }
-
-        // Remove any existing click listeners
-        const newStartBattleBtn = startBattleBtn.cloneNode(true);
-        startBattleBtn.parentNode.replaceChild(newStartBattleBtn, startBattleBtn);
-
-        // Add click listener to the new button
-        const handleBattleStart = async (e) => {
-            console.log('Battle button clicked!', e);
-
-            newStartBattleBtn.disabled = true;
-            newStartBattleBtn.classList.add('disabled');
-            newStartBattleBtn.textContent = 'Battle In Progress...';
-
-            // Reset timer and progress
-            timeLeft = BATTLE_DURATION;
-            progressFill.style.width = '0%';
-
-            // Start the timer
-            if (battleInterval) {
-                clearInterval(battleInterval);
-            }
-
-            battleInterval = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                battleTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-                // Update progress bar
-                const progress = ((BATTLE_DURATION - timeLeft) / BATTLE_DURATION) * 100;
-                progressFill.style.width = `${progress}%`;
-
-                // Add urgent class when time is running low
-                if (timeLeft <= 30) {
-                    battleTimer.classList.add('urgent');
-                }
-
-                // End battle when time runs out
-                if (timeLeft <= 0) {
-                    clearInterval(battleInterval);
-                    this.endBattle();
-                }
-            }, 1000);
-
-            try {
-                // First rapper's turn
-                turnIndicator.textContent = "DHANJI's Turn";
-                turnIndicator.parentElement.classList.add('active');
-                await this.handleBattleTurn(0);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // Second rapper's turn
-                turnIndicator.textContent = "KR$NA's Turn";
-                await this.handleBattleTurn(1);
-
-                // End battle
-                this.endBattle();
-            } catch (error) {
-                console.error('Error during battle:', error);
-                this.showNotification('An error occurred during the battle. Please try again.');
-                this.endBattle();
+        // Define rapper pairs for each category
+        const rapperPairs = {
+            roast: {
+                left: { name: 'Raftaar', avatar: 'raftaar.jpg' },
+                right: { name: '2Pac', avatar: 'tupac-pfp.jpg' }
+            },
+            aggressive: {
+                left: { name: 'Eminem', avatar: 'eminem.jpg' },
+                right: { name: 'KR$NA', avatar: 'krsna-portrait.jpg' }
+            },
+            funny: {
+                left: { name: 'Tyler', avatar: 'Tyler 🎀.jpg' },
+                right: { name: 'MC Stan', avatar: 'mc stan.jpg' }
+            },
+            freestyle: {
+                left: { name: 'Encore ABJ', avatar: 'Encore ABJ.jpg' },
+                right: { name: 'Harry Mack', avatar: 'Harry.jpg' }
             }
         };
 
-        // Add both click and mousedown event listeners
-        newStartBattleBtn.addEventListener('click', handleBattleStart);
-        newStartBattleBtn.addEventListener('mousedown', (e) => {
-            console.log('Button mousedown event:', e);
-        });
-
-        // Debug click handler
-        newStartBattleBtn.onclick = (e) => {
-            console.log('Direct onclick handler triggered', e);
-        };
-    }
-
-    // End battle method
-    endBattle() {
-        const startBattleBtn = document.querySelector('.start-battle-btn');
-        const battleTimer = document.querySelector('.battle-timer');
-        const turnIndicator = document.querySelector('.rapper-turn-indicator');
-
-        // Reset button
-        startBattleBtn.disabled = false;
-        startBattleBtn.classList.remove('disabled');
-        startBattleBtn.textContent = 'Begin Battle';
-
-        // Reset timer
-        battleTimer.classList.remove('urgent');
-        battleTimer.textContent = '02:00';
-
-        // Hide turn indicator
-        turnIndicator.classList.remove('active');
-
-        // Enable voting
-        const voteButtons = document.querySelectorAll('.vote-btn-left, .vote-btn-right');
-        voteButtons.forEach(btn => {
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
-        });
-
-        // Show voting prompt
-        this.showNotification('Time to vote for your favorite!');
-    }
-
-    // Add after initializeBattle method
-    initializeSpectatorMode() {
-        const spectatorToggle = document.getElementById('spectatorMode');
-        const battleStage = document.querySelector('.battle-stage');
-        const spectatorCount = document.querySelector('.spectator-count .count');
-        
-        if (spectatorToggle) {
-            spectatorToggle.addEventListener('change', (e) => {
-                this.isSpectator = e.target.checked;
-                
-                if (this.isSpectator) {
-                    battleStage.classList.add('spectator-mode');
-                    this.spectatorCount++;
-                    this.showSpectatorMessage('Entered Spectator Mode - Watch and enjoy the battle!');
-                } else {
-                    battleStage.classList.remove('spectator-mode');
-                    this.spectatorCount = Math.max(0, this.spectatorCount - 1);
-                    this.showSpectatorMessage('Exited Spectator Mode - You can now participate!');
-                }
-                
-                // Update spectator count
-                spectatorCount.textContent = this.spectatorCount;
-            });
-        }
-    }
-
-    showSpectatorMessage(message) {
-        // Remove existing message if any
-        const existingMessage = document.querySelector('.spectator-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create new message
-        const messageElement = document.createElement('div');
-        messageElement.className = 'spectator-message';
-        messageElement.textContent = message;
-        document.querySelector('.battle-stage').appendChild(messageElement);
-
-        // Show message
-        setTimeout(() => messageElement.classList.add('visible'), 100);
-
-        // Remove message after delay
-        setTimeout(() => {
-            messageElement.classList.remove('visible');
-            setTimeout(() => messageElement.remove(), 300);
-        }, 3000);
-    }
-
-    // Handle convert to audio button clicks
-    async handleVoiceConversion(button, input, voiceSelect) {
-        if (!input.value.trim()) {
-            this.showNotification('Please write some verses first!');
-            return;
-        }
-
-        try {
-            // Show loading state
-            button.disabled = true;
-            button.textContent = 'Converting...';
-            button.classList.add('loading');
-
-            const success = await murfService.convertToSpeech(
-                input.value.trim(),
-                voiceSelect.value
-            );
-
-            if (success) {
-                this.showNotification('Rap converted successfully! 🎵');
-                button.classList.add('success');
-                setTimeout(() => button.classList.remove('success'), 2000);
+        // Define suggested lines for each category
+        const suggestedLines = {
+            roast: {
+                hinglish: [
+                    'Teri vibe hai thandi jaise purani chai,\nMain hoon spotlight, tu background guy',
+                    'Bars mere fire, tere jaise jal jaayein,\nRap kare tu, log neend mein chale jaayein'
+                ],
+                english: [
+                    'You\'re all bark, no bite, just noise in the crowd,\nI\'m the storm in the booth, thunder spittin\' loud',
+                    'You flex online, but freeze on the mic,\nI drop one bar, and it ends your hype'
+                ]
+            },
+            aggressive: {
+                hinglish: [
+                    'Main hoon jung ka sher, tu gali ka chuha,\nTere jaise sau aaye, maine sabko dhooya',
+                    'Tere bars hai fake, jaise insta ka fame,\nMain likhu toh lage jaise jal gaya game'
+                ],
+                english: [
+                    'I don\'t play safe, I aim for the head,\nOne bar from me, and your whole crew\'s dead',
+                    'Step in my zone, get torn like a page,\nI spit like a beast that just broke out the cage'
+                ]
+            },
+            funny: {
+                hinglish: [
+                    'Tere jokes pe hansi sirf mummy ko aayi,\nBaaki sab ne bola, "beta chhup ho ja bhai!"',
+                    'Swag dikhaye tu, par chappal hai hawai,\nTinder pe likha "model," par photo mein bhai'
+                ],
+                english: [
+                    'You call yourself a king, but can\'t find your crown,\nEven autocorrect turns your bars down',
+                    'You post gym pics like you lift a ton,\nBut dropped your phone and called it a \'leg day run\''
+                ]
+            },
+            freestyle: {
+                hinglish: [
+                    'Mic haath mein, beat chalu, mood hai high,\nSoch meri sky pe, main udta jaaun bhai',
+                    'Flow mera smooth, jaise butter on toast,\nTere bars ka taste, jaise kadvi chai ka dose'
+                ],
+                english: [
+                    'Words in my mind, let the rhythm decide,\nI ride every beat like a wave I can\'t hide',
+                    'No script, no pen, just vibes and flow,\nI speak from the soul, let the real ones know'
+                ]
             }
-        } catch (error) {
-            console.error('Voice conversion error:', error);
-            this.showNotification(error.message || 'Failed to convert rap to speech. Please try again.');
-            button.classList.add('error');
-            setTimeout(() => button.classList.remove('error'), 2000);
-        } finally {
-            // Reset button state
-            button.disabled = false;
-            button.textContent = 'Convert to Audio 🎤';
-            button.classList.remove('loading');
+        };
+
+        // Handle category selection
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                console.log('Selected category:', category);
+
+                // Update active state
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Update rappers
+                const pair = rapperPairs[category];
+                if (pair) {
+                    // Update names with animation
+                    if (leftRapperName) {
+                        leftRapperName.style.opacity = '0';
+                        setTimeout(() => {
+                            leftRapperName.textContent = pair.left.name;
+                            leftRapperName.style.opacity = '1';
+                        }, 300);
+                    }
+                    if (rightRapperName) {
+                        rightRapperName.style.opacity = '0';
+                        setTimeout(() => {
+                            rightRapperName.textContent = pair.right.name;
+                            rightRapperName.style.opacity = '1';
+                        }, 300);
+                    }
+
+                    // Update avatars with animation
+                    if (leftAvatar) {
+                        leftAvatar.style.opacity = '0';
+                        setTimeout(() => {
+                            leftAvatar.src = pair.left.avatar;
+                            leftAvatar.style.opacity = '1';
+                        }, 300);
+                    }
+                    if (rightAvatar) {
+                        rightAvatar.style.opacity = '0';
+                        setTimeout(() => {
+                            rightAvatar.src = pair.right.avatar;
+                            rightAvatar.style.opacity = '1';
+                        }, 300);
+                    }
+
+                    // Ensure voice selections are maintained
+                    if (leftVoiceSelect && !leftVoiceSelect.value) {
+                        leftVoiceSelect.value = 'en-IN-rohan';
+                    }
+                    if (rightVoiceSelect && !rightVoiceSelect.value) {
+                        rightVoiceSelect.value = 'en-IN-aarav';
+                    }
+
+                    // Update vote button text
+                    const leftVoteBtn = document.querySelector('.vote-btn-left');
+                    const rightVoteBtn = document.querySelector('.vote-btn-right');
+                    if (leftVoteBtn) leftVoteBtn.textContent = `Vote for ${pair.left.name}`;
+                    if (rightVoteBtn) rightVoteBtn.textContent = `Vote for ${pair.right.name}`;
+                }
+
+                // Update suggested lines
+                const lines = suggestedLines[category];
+                if (lines && suggestionBox) {
+                    // Get random lines
+                    const hinglishIndex = Math.floor(Math.random() * lines.hinglish.length);
+                    const englishIndex = Math.floor(Math.random() * lines.english.length);
+
+                    // Update suggestion box with animation
+                    suggestionBox.style.opacity = '0';
+                    setTimeout(() => {
+                        suggestionBox.innerHTML = `
+                            <div class="suggestion-category">
+                                <span class="category-label">🎭 ${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                                <div class="suggestion-line" draggable="true" data-verse="${lines.hinglish[hinglishIndex]}">
+                                    ${lines.hinglish[hinglishIndex].split('\n').join('<br>')}
+                                </div>
+                                <div class="suggestion-line" draggable="true" data-verse="${lines.english[englishIndex]}">
+                                    ${lines.english[englishIndex].split('\n').join('<br>')}
+                                </div>
+                            </div>
+                        `;
+                        suggestionBox.style.opacity = '1';
+
+                        // Initialize drag and drop for new lines
+                        this.initializeDragAndDrop();
+                    }, 300);
+                }
+
+                // Show notification
+                this.showNotification(`Switched to ${category} mode! 🎤`);
+            });
+        });
+
+        // Initialize drag and drop functionality
+        this.initializeDragAndDrop();
+
+        // Select first category by default
+        if (categoryButtons.length > 0) {
+            categoryButtons[0].click();
         }
     }
 
-    // Initialize verse input system
-    initializeVerseInput() {
+    // Initialize drag and drop functionality
+    initializeDragAndDrop() {
+        console.log('Initializing drag and drop...');
+        
+        const draggableLines = document.querySelectorAll('.suggestion-line');
         const verseInputs = document.querySelectorAll('.verse-input');
-        const clearButtons = document.querySelectorAll('.clear-btn');
-        const previewButtons = document.querySelectorAll('.preview-btn');
-        const suggestionLines = document.querySelectorAll('.suggestion-line');
+        let currentFocusedInput = null; // Track which input is currently focused
         
-        // Initialize drag and drop
-        suggestionLines.forEach(line => {
+        console.log('Found elements:', {
+            draggableLines: draggableLines.length,
+            verseInputs: verseInputs.length
+        });
+
+        // Track focused input
+        verseInputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                currentFocusedInput = input;
+                console.log('Input focused:', input.id);
+            });
+        });
+
+        draggableLines.forEach(line => {
+            // Make sure draggable attribute is set
             line.setAttribute('draggable', 'true');
             
             line.addEventListener('dragstart', (e) => {
+                console.log('Drag started');
+                e.dataTransfer.setData('text/plain', line.textContent.trim());
                 line.classList.add('dragging');
                 
-                // Create custom ghost image
-                const ghost = document.createElement('div');
-                ghost.className = 'drag-ghost';
-                ghost.textContent = line.textContent;
-                document.body.appendChild(ghost);
-                e.dataTransfer.setDragImage(ghost, 10, 10);
-                
-                // Clean up ghost after drag
-                setTimeout(() => {
-                    document.body.removeChild(ghost);
-                }, 0);
-                
-                e.dataTransfer.setData('text/plain', line.getAttribute('data-line'));
-            });
-            
-            line.addEventListener('dragend', () => {
-                line.classList.remove('dragging');
-                document.querySelectorAll('.drag-over').forEach(el => 
-                    el.classList.remove('drag-over')
-                );
-            });
-        });
-        
-        // Handle drop zones (verse inputs)
-        verseInputs.forEach(input => {
-            const container = input.closest('.verse-input-container');
-            
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                input.addEventListener(eventName, (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                });
-                
-                container.addEventListener(eventName, (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                });
-            });
-            
-            // Visual feedback for drag over
-            ['dragenter', 'dragover'].forEach(eventName => {
-                input.addEventListener(eventName, () => {
-                    container.classList.add('drag-over');
-                    input.classList.add('drag-over');
-                });
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                input.addEventListener(eventName, () => {
-                    container.classList.remove('drag-over');
-                    input.classList.remove('drag-over');
-                });
-            });
-            
-            // Handle the drop
-            input.addEventListener('drop', (e) => {
-                const verse = e.dataTransfer.getData('text/plain');
-                
-                // If there's existing text, add a new line
-                if (input.value) {
-                    input.value += '\n' + verse;
-                } else {
-                    input.value = verse;
-                }
-                
-                // Trigger input event for auto-resize
-                input.dispatchEvent(new Event('input'));
-                
-                // Show success notification
-                this.showNotification('Verse added! 🎤');
-            });
-        });
-        
-        // Keep existing functionality
-        verseInputs.forEach((input, index) => {
-            // Store initial placeholder
-            const initialPlaceholder = input.placeholder;
-            
-            // Focus effects
-            input.addEventListener('focus', () => {
-                input.placeholder = '';
-                // Highlight corresponding rapper side
-                const rapperSide = input.closest('.rapper-side');
-                if (rapperSide) {
-                    rapperSide.style.opacity = '1';
-                    const otherSide = rapperSide.classList.contains('left') ? 
-                        document.querySelector('.rapper-side.right') : 
-                        document.querySelector('.rapper-side.left');
-                    if (otherSide) {
-                        otherSide.style.opacity = '0.7';
+                // Create custom drag image
+                const dragImage = line.cloneNode(true);
+                dragImage.style.cssText = `
+                    position: absolute;
+                    top: -1000px;
+                    background: rgba(255, 140, 0, 0.2);
+                    padding: 10px;
+                    border-radius: 5px;
+                    pointer-events: none;
+                    width: ${line.offsetWidth}px;
+                `;
+                document.body.appendChild(dragImage);
+                e.dataTransfer.setDragImage(dragImage, 0, 0);
+                setTimeout(() => dragImage.remove(), 0);
+
+                // Highlight all verse inputs as valid drop targets
+                verseInputs.forEach(input => {
+                    if (!this.isSpectator) {
+                        input.classList.add('valid-drop-target');
                     }
-                }
-            });
-            
-            input.addEventListener('blur', () => {
-                if (!input.value) {
-                    input.placeholder = initialPlaceholder;
-                }
-                // Reset opacity of rapper sides
-                document.querySelectorAll('.rapper-side').forEach(side => {
-                    side.style.opacity = '1';
                 });
             });
-            
-            // Auto-resize
-            input.addEventListener('input', () => {
-                input.style.height = 'auto';
-                input.style.height = (input.scrollHeight) + 'px';
+
+            line.addEventListener('dragend', () => {
+                console.log('Drag ended');
+                line.classList.remove('dragging');
+                verseInputs.forEach(input => {
+                    input.classList.remove('drag-over');
+                    input.classList.remove('valid-drop-target');
+                });
             });
-        });
-        
-        // Clear button functionality
-        clearButtons.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                const input = btn.closest('.verse-input-container').querySelector('.verse-input');
-                input.value = '';
-                input.style.height = 'auto';
+
+            // Add hover effects
+            line.addEventListener('mouseenter', () => {
+                if (!this.isSpectator) {
+                line.style.transform = 'scale(1.02)';
+                    line.style.cursor = 'grab';
+                    line.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                }
             });
-        });
-        
-        // Preview button functionality
-        previewButtons.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                const input = btn.closest('.verse-input-container').querySelector('.verse-input');
-                const verseContainer = btn.closest('.rapper-controls').querySelector('.rap-verse-container');
+
+            line.addEventListener('mouseleave', () => {
+                line.style.transform = 'scale(1)';
+                line.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            });
+
+            // Add click-to-copy functionality
+            line.addEventListener('click', () => {
+                if (this.isSpectator) {
+                    this.showNotification('Cannot add lines in spectator mode 👀');
+                    return;
+                }
+
+                const text = line.textContent.trim();
                 
-                if (input.value.trim()) {
-                    // Split input into lines
-                    const lines = input.value.trim().split('\n');
+                // Use currently focused input or default to left input if none focused
+                const targetInput = currentFocusedInput || document.querySelector('#leftRapText');
+                
+                if (targetInput) {
+                    if (targetInput.value && !targetInput.value.endsWith('\n')) {
+                        targetInput.value += '\n';
+                    }
+                    targetInput.value += text;
                     
-                    // Clear existing content
-                    verseContainer.innerHTML = '';
+                    // Add visual feedback
+                    line.style.backgroundColor = 'rgba(255, 140, 0, 0.3)';
+                    setTimeout(() => {
+                        line.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    }, 300);
                     
-                    // Display each line with animation
-                    this.displayRapVerse(verseContainer, lines, true);
-                } else {
-                    this.showNotification('Please write some verses first!');
+                    // Update preview if it exists
+                    const side = targetInput.id.includes('left') ? 'left' : 'right';
+                    const previewContainer = document.querySelector(`.rapper-side.${side} .rap-verse-container`);
+                    if (previewContainer) {
+                        const versePreview = previewContainer.querySelector('.verse-preview');
+                        if (versePreview) {
+                            versePreview.querySelector('pre').textContent = targetInput.value;
+                        }
+                    }
+                    
+                    this.showNotification(`Line added to ${side === 'left' ? 'Rapper 1' : 'Rapper 2'}! ✍️`);
+                    
+                    // Keep focus on the input
+                    targetInput.focus();
                 }
             });
         });
 
-        // Initialize suggestion categories
-        const categories = document.querySelectorAll('.category-label');
-        categories.forEach(category => {
-            category.addEventListener('click', () => {
-                const currentCategory = category.parentElement;
-                const wasActive = currentCategory.classList.contains('active');
-                
-                // Reset all categories
-                document.querySelectorAll('.suggestion-category').forEach(cat => {
-                    cat.classList.remove('active');
-                    const lines = cat.querySelectorAll('.suggestion-line');
-                    lines.forEach(line => line.style.display = 'none');
-                });
-                
-                if (!wasActive) {
-                    // Activate clicked category
-                    currentCategory.classList.add('active');
-                    const lines = currentCategory.querySelectorAll('.suggestion-line');
-                    lines.forEach(line => {
-                        line.style.display = 'block';
-                        line.style.animation = 'slideIn 0.3s ease forwards';
-                    });
-                } else {
-                    // Show all suggestions
-                    document.querySelectorAll('.suggestion-line').forEach(line => {
-                        line.style.display = 'block';
-                        line.style.animation = 'slideIn 0.3s ease forwards';
-                    });
+        verseInputs.forEach(input => {
+            input.addEventListener('dragenter', (e) => {
+                e.preventDefault();
+                if (!this.isSpectator) {
+                    input.classList.add('drag-over');
                 }
             });
+
+            input.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (!this.isSpectator) {
+                    e.dataTransfer.dropEffect = 'copy';
+                input.classList.add('drag-over');
+                }
+            });
+
+            input.addEventListener('dragleave', () => {
+                input.classList.remove('drag-over');
+            });
+
+            input.addEventListener('drop', (e) => {
+                e.preventDefault();
+                input.classList.remove('drag-over');
+                input.classList.remove('valid-drop-target');
+                
+                if (this.isSpectator) {
+                    this.showNotification('Cannot add verses in spectator mode');
+                    return;
+                }
+
+                const verse = e.dataTransfer.getData('text/plain');
+                console.log('Dropped verse:', verse);
+
+                if (!verse) {
+                    console.error('No verse data found in drop event');
+                    return;
+                }
+
+                // Add newline if needed
+                if (input.value && !input.value.endsWith('\n')) {
+                    input.value += '\n';
+                }
+                input.value += verse;
+
+                // Update preview if it exists
+                const side = input.id.includes('left') ? 'left' : 'right';
+                const previewContainer = document.querySelector(`.rapper-side.${side} .rap-verse-container`);
+                if (previewContainer) {
+                    const versePreview = previewContainer.querySelector('.verse-preview');
+                    if (versePreview) {
+                        versePreview.querySelector('pre').textContent = input.value;
+                    }
+                }
+
+                // Add drop animation
+                const dropAnimation = document.createElement('div');
+                dropAnimation.className = 'drop-animation';
+                dropAnimation.style.cssText = `
+                    position: absolute;
+                    top: ${e.offsetY}px;
+                    left: ${e.offsetX}px;
+                    width: 20px;
+                    height: 20px;
+                    background: rgba(255, 140, 0, 0.5);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: dropRipple 0.6s ease-out;
+                `;
+                input.appendChild(dropAnimation);
+                setTimeout(() => dropAnimation.remove(), 600);
+
+                // Focus the input after dropping
+                input.focus();
+                currentFocusedInput = input;
+                
+                this.showNotification(`Verse added to ${side === 'left' ? 'Rapper 1' : 'Rapper 2'}! 🎤`);
+            });
         });
+
+        // Add styles for drag and drop
+        const style = document.createElement('style');
+        style.textContent = `
+            .suggestion-line {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 12px;
+                margin: 8px 0;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                cursor: grab;
+                user-select: none;
+                position: relative;
+            }
+            
+            .suggestion-line:hover {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.2);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+            
+            .suggestion-line.dragging {
+                opacity: 0.5;
+                cursor: grabbing;
+                transform: scale(0.95);
+            }
+            
+            .verse-input.drag-over {
+                border-color: rgba(255, 140, 0, 1);
+                background: rgba(255, 140, 0, 0.1);
+                transform: scale(1.01);
+            }
+            
+            @keyframes dropRipple {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(20);
+                    opacity: 0;
+                }
+            }
+            
+            .suggestion-line::before {
+                content: '⋮';
+                position: absolute;
+                left: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: rgba(255, 255, 255, 0.5);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            
+            .suggestion-line:hover::before {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     // Initialize Murf AI integration
@@ -1385,6 +1683,332 @@ class ReluxePlatform {
         console.log('Music player setup skipped - feature coming soon');
         // Placeholder for future music player implementation
     }
+
+    // Initialize How It Works page functionality
+    initializeHowItWorks() {
+        console.log('Initializing How It Works page...');
+
+        // FAQ Interaction
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Close other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+
+        // Battle Arena Navigation
+        const battleBtn = document.querySelector('.start-battle-btn[data-section="battle-arena"]');
+        if (battleBtn) {
+            battleBtn.addEventListener('click', () => {
+                // Hide current section
+                const currentSection = document.querySelector('.content-section:not(.hidden)');
+                if (currentSection) {
+                    currentSection.classList.add('hidden');
+                }
+
+                // Show battle arena section
+                const battleArena = document.getElementById('battle-arena');
+                if (battleArena) {
+                    battleArena.classList.remove('hidden');
+                    battleArena.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // Update navigation buttons
+                const navButtons = document.querySelectorAll('.nav-btn');
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.section === 'battle-arena') {
+                        btn.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Add hover effect for feature cards
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                    translateZ(10px)
+                `;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // Demo Section
+        const demoSteps = document.querySelectorAll('.demo-step');
+        const demoInput = document.querySelector('.demo-input');
+        const demoOutput = document.querySelector('.demo-output');
+        
+        demoSteps.forEach(step => {
+            step.addEventListener('click', () => {
+                const stepNumber = step.dataset.step;
+                
+                // Remove active state from all steps
+                demoSteps.forEach(s => s.classList.remove('active'));
+                step.classList.add('active');
+                
+                switch(stepNumber) {
+                    case '1':
+                        demoInput.style.display = 'block';
+                        demoOutput.style.display = 'none';
+                        demoInput.placeholder = 'Write your verse here...';
+                        break;
+                    case '2':
+                        demoInput.style.display = 'none';
+                        demoOutput.style.display = 'block';
+                        demoOutput.innerHTML = `
+                            <div class="conversion-preview">
+                                <div class="waveform-animation"></div>
+                                <button class="play-preview">▶️ Play Preview</button>
+                            </div>
+                        `;
+                        break;
+                    case '3':
+                        demoInput.style.display = 'none';
+                        demoOutput.style.display = 'block';
+                        demoOutput.innerHTML = `
+                            <div class="battle-preview">
+                                <div class="mini-battle-arena">
+                                    <div class="mini-rapper">Rapper 1</div>
+                                    <div class="vs-text">VS</div>
+                                    <div class="mini-rapper">Rapper 2</div>
+                                </div>
+                                <button class="start-preview">Start Battle</button>
+                            </div>
+                        `;
+                        break;
+                }
+            });
+        });
+
+        // Feature Card Demos
+        const voiceDemo = document.querySelector('[data-feature="voice"] .demo-btn');
+        if (voiceDemo) {
+            voiceDemo.addEventListener('click', () => {
+                const audioPreview = voiceDemo.nextElementSibling;
+                if (audioPreview) {
+                    audioPreview.style.display = 'block';
+                    // Add waveform animation
+                    const waveform = audioPreview.querySelector('.waveform');
+                    if (waveform) {
+                        waveform.innerHTML = `
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                        `;
+                    }
+                }
+            });
+        }
+
+        // Mini Suggestion Drag and Drop Demo
+        const miniSuggestion = document.querySelector('.mini-suggestion');
+        if (miniSuggestion) {
+            miniSuggestion.addEventListener('dragstart', (e) => {
+                miniSuggestion.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', miniSuggestion.textContent);
+            });
+
+            miniSuggestion.addEventListener('dragend', () => {
+                miniSuggestion.classList.remove('dragging');
+            });
+        }
+
+        // Achievement Cards Animation
+        const achievementCards = document.querySelectorAll('.achievement-card');
+        achievementCards.forEach(card => {
+            const progress = card.querySelector('.progress');
+            if (progress) {
+                // Animate progress bar when card is in view
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            progress.style.width = progress.style.width || '0%';
+                            requestAnimationFrame(() => {
+                                progress.style.transition = 'width 1s ease';
+                                progress.style.width = progress.parentElement.dataset.progress || '50%';
+                            });
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                observer.observe(card);
+            }
+        });
+
+        // Timeline Steps Animation
+        const timelineSteps = document.querySelectorAll('.timeline-step');
+        timelineSteps.forEach((step, index) => {
+            step.style.opacity = '0';
+            step.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                step.style.transition = 'all 0.5s ease';
+                step.style.opacity = '1';
+                step.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
+
+        // Resource Cards Hover Effect
+        const resourceCards = document.querySelectorAll('.resource-card');
+        resourceCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px)';
+                card.style.boxShadow = '0 5px 15px rgba(255, 140, 0, 0.2)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = 'none';
+            });
+        });
+
+        // CTA Button Effect
+        const ctaButton = document.querySelector('.cta-section .start-battle-btn');
+        if (ctaButton) {
+            ctaButton.addEventListener('click', () => {
+                // Navigate to battle arena
+                const battleArenaBtn = document.querySelector('[data-section="battle-arena"]');
+                if (battleArenaBtn) {
+                    battleArenaBtn.click();
+                }
+            });
+        }
+    }
+
+    initializeSidebar() {
+        const menuButton = document.querySelector('.logo-icon');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarButton = document.querySelector('.close-sidebar');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const categoryCards = document.querySelectorAll('.category-card');
+        const actionButtons = document.querySelectorAll('.action-btn');
+
+        if (!sidebar || !sidebarOverlay || !menuButton || !closeSidebarButton) {
+            console.error('Sidebar elements not found');
+            return;
+        }
+
+        const closeSidebar = () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        const openSidebar = () => {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        // Event Listeners
+        menuButton.addEventListener('click', openSidebar);
+        closeSidebarButton.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // Close sidebar on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                closeSidebar();
+            }
+        });
+
+        // Handle navigation links
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.getAttribute('data-section');
+                if (section) {
+                    this.showSection(section);
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Handle category cards
+        categoryCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = card.getAttribute('data-category');
+                if (category) {
+                    // Handle category selection
+                    categoryCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    // Add your category handling logic here
+                }
+            });
+        });
+
+        // Handle action buttons
+        actionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('logout')) {
+                    // Handle logout
+                    console.log('Logging out...');
+                } else if (button.textContent.includes('Settings')) {
+                    // Handle settings
+                    console.log('Opening settings...');
+                } else if (button.textContent.includes('Practice')) {
+                    // Handle practice mode
+                    console.log('Starting practice mode...');
+                }
+            });
+        });
+
+        // Add touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+
+        const handleSwipe = () => {
+            const swipeThreshold = 50;
+            const swipeDistance = touchEndX - touchStartX;
+
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0 && !sidebar.classList.contains('active')) {
+                    // Swipe right, open sidebar
+                    openSidebar();
+                } else if (swipeDistance < 0 && sidebar.classList.contains('active')) {
+                    // Swipe left, close sidebar
+                    closeSidebar();
+                }
+            }
+        };
+    }
 }
 
 // Initialize the platform when DOM is loaded
@@ -1394,6 +2018,9 @@ document.addEventListener('DOMContentLoaded', () => {
     platform = new ReluxePlatform();
     platform.init();
 });
+
+// Export for module systems
+export default ReluxePlatform;
 
 // Additional utility functions
 const utils = {
@@ -1424,6 +2051,3 @@ const utils = {
         };
     }
 };
-
-// Export for module systems
-export default ReluxePlatform;
