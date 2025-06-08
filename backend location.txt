@@ -1,3 +1,2 @@
-cd /d "C:\Users\Admin\OneDrive\Desktop\Projects\rap-battle-app\backend"
-
+cd /d "C:\Users\Admin\OneDrive\Desktop\Projects\BarWars\backend"
 
