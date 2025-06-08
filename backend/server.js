@@ -19,7 +19,7 @@ app.use(express.json());
 // Constants
 const MURF_API_URL = 'https://api.murf.ai/v1/speech/stream';
 const PORT = process.env.PORT || 3000;
-const API_KEY = 'ap2_093e98b6-fffd-4a8d-b5b7-b4bd62e57892';
+const API_KEY = 'your_murf_api_key_here';
 
 // Valid voices configuration
 const VALID_VOICES = [
