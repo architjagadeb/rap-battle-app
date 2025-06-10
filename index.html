@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rap Battle 2</title>
+    <title>BarWars</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script type="module" src="script.js"></script>
@@ -178,7 +178,8 @@
     <!-- Search Overlay -->
     <div class="search-overlay hidden">
         <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" name="searchInput" placeholder="Search battles, rappers...">
+            <input type="text" class="search-input" id="searchInput" name="searchInput"
+                placeholder="Search battles, rappers...">
             <button class="close-search">✕</button>
         </div>
         <div class="search-results"></div>
@@ -197,12 +198,14 @@
         <div class="main-content">
             <div class="circle-container">
                 <div class="circle orange-circle">
-                    <div class="platform-text">The platform helps aspiring artists bring their music to the audience</div>
+                    <div class="platform-text">The platform helps aspiring artists bring their music to the audience
+                    </div>
                 </div>
 
                 <div class="circle gray-circle">
                     <div class="artist-image">
-                        <img src="tupac.jpg" alt="Tupac" class="artist-photo" style="display: block; object-fit: cover; border-radius: 50%;" />
+                        <img src="tupac.jpg" alt="Tupac" class="artist-photo"
+                            style="display: block; object-fit: cover; border-radius: 50%;" />
                         <div class="image-placeholder" style="display: none;">[Artist Image]</div>
                     </div>
                 </div>
@@ -220,7 +223,8 @@
         <div class="feature-cards">
             <div class="feature-card" data-category="create">
                 <div class="card-image">
-                    <img src="life-is-good.jpg" alt="Drake and Kendrick Lamar - Life is Good" class="card-photo" style="display: block; object-fit: cover;" />
+                    <img src="life-is-good.jpg" alt="Drake and Kendrick Lamar - Life is Good" class="card-photo"
+                        style="display: block; object-fit: cover;" />
                     <div class="card-placeholder" style="display: none;">[Create Image]</div>
                 </div>
                 <div class="card-content">
@@ -237,7 +241,8 @@
 
             <div class="feature-card" data-category="support">
                 <div class="card-image">
-                    <img src="astroworld.jpg" alt="Travis Scott - Astroworld" class="card-photo" style="display: block; object-fit: cover;" />
+                    <img src="astroworld.jpg" alt="Travis Scott - Astroworld" class="card-photo"
+                        style="display: block; object-fit: cover;" />
                     <div class="card-placeholder" style="display: none;">[Support Image]</div>
                 </div>
                 <div class="card-content">
@@ -254,7 +259,8 @@
 
             <div class="feature-card" data-category="guaranteed">
                 <div class="card-image">
-                    <img src="gnx.jpg" alt="GNX Album Cover" class="card-photo" style="display: block; object-fit: cover;" />
+                    <img src="gnx.jpg" alt="GNX Album Cover" class="card-photo"
+                        style="display: block; object-fit: cover;" />
                     <div class="card-placeholder" style="display: none;">[Payment Image]</div>
                 </div>
                 <div class="card-content">
@@ -275,20 +281,22 @@
     <section id="about" class="content-section hidden">
         <div class="section-content about-content">
             <h2 class="about-title">About BarWars</h2>
-            
+
             <div class="about-grid">
                 <!-- Vision Section -->
                 <div class="about-card vision-card">
                     <div class="card-icon">🎯</div>
                     <h3>Our Vision</h3>
-                    <p>Empowering artists to showcase their talent and connect with fans worldwide. We believe every voice deserves to be heard.</p>
+                    <p>Empowering artists to showcase their talent and connect with fans worldwide. We believe every
+                        voice deserves to be heard.</p>
                 </div>
 
                 <!-- Mission Section -->
                 <div class="about-card mission-card">
                     <div class="card-icon">🚀</div>
                     <h3>Our Mission</h3>
-                    <p>Creating a platform where creativity meets opportunity, enabling artists to battle, collaborate, and grow together.</p>
+                    <p>Creating a platform where creativity meets opportunity, enabling artists to battle, collaborate,
+                        and grow together.</p>
                 </div>
 
                 <!-- Features Section -->
@@ -345,8 +353,10 @@
                     <div class="rap-categories">
                         <button class="category-btn" id="roastBtn" name="roastBtn" data-category="roast">Roast</button>
                         <button class="category-btn" id="funnyBtn" name="funnyBtn" data-category="funny">Funny</button>
-                        <button class="category-btn" id="aggressiveBtn" name="aggressiveBtn" data-category="aggressive">Aggressive</button>
-                        <button class="category-btn" id="freestyleBtn" name="freestyleBtn" data-category="freestyle">Freestyle</button>
+                        <button class="category-btn" id="aggressiveBtn" name="aggressiveBtn"
+                            data-category="aggressive">Aggressive</button>
+                        <button class="category-btn" id="freestyleBtn" name="freestyleBtn"
+                            data-category="freestyle">Freestyle</button>
                     </div>
                     <div class="rap-list">
                         <!-- Rap verses will be dynamically loaded based on category -->
@@ -371,7 +381,8 @@
                             <!-- Add avatar selection -->
                             <div class="rapper-avatar-selector">
                                 <div class="avatar-preview">
-                                    <img src="mc-avatar-sunglasses.jpg" alt="MC with Sunglasses" class="avatar-image" style="object-fit: cover; width: 100%; height: 100%;">
+                                    <img src="mc-avatar-sunglasses.jpg" alt="MC with Sunglasses" class="avatar-image"
+                                        style="object-fit: cover; width: 100%; height: 100%;">
                                     <div class="avatar-overlay">
                                         <span class="change-avatar-btn">Change Avatar</span>
                                     </div>
@@ -396,20 +407,17 @@
                                     <option value="en-IN-rohan">Rohan (Male)</option>
                                     <option value="en-IN-aarav">Aarav (Male)</option>
                                 </select>
-                                
+
                                 <!-- Verse Input System -->
                                 <div class="verse-input-system">
                                     <div class="verse-input-container">
-                                        <textarea 
-                                            class="verse-input" 
-                                            id="leftRapText"
-                                            name="leftRapText"
-                                            placeholder="Write your rap verse here..."
-                                            rows="6"
-                                        ></textarea>
+                                        <textarea class="verse-input" id="leftRapText" name="leftRapText"
+                                            placeholder="Write your rap verse here..." rows="6"></textarea>
                                         <div class="verse-input-tools">
-                                            <button class="tool-btn clear-btn" id="leftClearBtn" name="leftClearBtn">Clear</button>
-                                            <button class="tool-btn preview-btn" id="leftPreviewBtn" name="leftPreviewBtn">Preview</button>
+                                            <button class="tool-btn clear-btn" id="leftClearBtn"
+                                                name="leftClearBtn">Clear</button>
+                                            <button class="tool-btn preview-btn" id="leftPreviewBtn"
+                                                name="leftPreviewBtn">Preview</button>
                                         </div>
                                     </div>
                                 </div>
@@ -418,25 +426,27 @@
                                     <!-- Rap verses will be typed here -->
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="convert-btn" id="leftConvertBtn" name="leftConvertBtn">Convert to Audio 🎤</button>
+                                    <button class="convert-btn" id="leftConvertBtn" name="leftConvertBtn">Convert to
+                                        Audio 🎤</button>
                                 </div>
                             </div>
                         </div>
                         <div class="vote-section">
                             <div class="vote-buttons">
-                                <button class="vote-btn-left" id="voteLeftBtn" name="voteLeftBtn">Vote for DHANJI</button>
+                                <button class="vote-btn-left" id="voteLeftBtn" name="voteLeftBtn">Vote for
+                                    DHANJI</button>
                             </div>
-                            
+
                             <div class="vote-counts">
                                 <span class="vote-count-left">0</span>
                             </div>
-                            
+
                             <div class="vote-indicator">
                                 <div class="vote-indicator-fill"></div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="versus-section">
                         <div class="battle-header">
                             <div class="battle-timer-container">
@@ -447,7 +457,7 @@
                                 <div class="battle-progress-fill"></div>
                             </div>
                         </div>
-                        
+
                         <div class="battle-main">
                             <div class="vs-animation">
                                 <div class="vs-text">VS</div>
@@ -461,8 +471,10 @@
                                 <span class="btn-text">Begin Battle</span>
                             </button>
                             <div class="battle-options">
-                                <button class="option-btn" id="rulesBtn" name="rulesBtn" title="Battle Rules">📋</button>
-                                <button class="option-btn" id="soundBtn" name="soundBtn" title="Sound Settings">🔊</button>
+                                <button class="option-btn" id="rulesBtn" name="rulesBtn"
+                                    title="Battle Rules">📋</button>
+                                <button class="option-btn" id="soundBtn" name="soundBtn"
+                                    title="Sound Settings">🔊</button>
                                 <button class="option-btn" id="reportBtn" name="reportBtn" title="Report">⚠️</button>
                             </div>
                         </div>
@@ -513,13 +525,9 @@
                             <!-- Add avatar selection -->
                             <div class="rapper-avatar-selector">
                                 <div class="avatar-preview">
-                                    <img 
-                                        src="mc stan.jpg" 
-                                        alt="MC Stan" 
-                                        class="avatar-image" 
+                                    <img src="mc stan.jpg" alt="MC Stan" class="avatar-image"
                                         style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; background-color: rgba(255, 140, 0, 0.2);"
-                                        onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 140, 0, 0.2); color: white;\'>MC Stan</div>'"
-                                    >
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 140, 0, 0.2); color: white;\'>MC Stan</div>'">
                                     <div class="avatar-overlay">
                                         <span class="change-avatar-btn">Change Avatar</span>
                                     </div>
@@ -544,20 +552,17 @@
                                     <option value="en-IN-rohan">Rohan (Male)</option>
                                     <option value="en-IN-aarav">Aarav (Male)</option>
                                 </select>
-                                
+
                                 <!-- Verse Input System -->
                                 <div class="verse-input-system">
                                     <div class="verse-input-container">
-                                        <textarea 
-                                            class="verse-input" 
-                                            id="rightRapText"
-                                            name="rightRapText"
-                                            placeholder="Write your rap verse here..."
-                                            rows="6"
-                                        ></textarea>
+                                        <textarea class="verse-input" id="rightRapText" name="rightRapText"
+                                            placeholder="Write your rap verse here..." rows="6"></textarea>
                                         <div class="verse-input-tools">
-                                            <button class="tool-btn clear-btn" id="rightClearBtn" name="rightClearBtn">Clear</button>
-                                            <button class="tool-btn preview-btn" id="rightPreviewBtn" name="rightPreviewBtn">Preview</button>
+                                            <button class="tool-btn clear-btn" id="rightClearBtn"
+                                                name="rightClearBtn">Clear</button>
+                                            <button class="tool-btn preview-btn" id="rightPreviewBtn"
+                                                name="rightPreviewBtn">Preview</button>
                                         </div>
                                     </div>
                                 </div>
@@ -566,19 +571,21 @@
                                     <!-- Rap verses will be typed here -->
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="convert-btn" id="rightConvertBtn" name="rightConvertBtn">Convert to Audio 🎤</button>
+                                    <button class="convert-btn" id="rightConvertBtn" name="rightConvertBtn">Convert to
+                                        Audio 🎤</button>
                                 </div>
                             </div>
                         </div>
                         <div class="vote-section">
                             <div class="vote-buttons">
-                                <button class="vote-btn-right" id="voteRightBtn" name="voteRightBtn">Vote for MC Stan</button>
+                                <button class="vote-btn-right" id="voteRightBtn" name="voteRightBtn">Vote for MC
+                                    Stan</button>
                             </div>
-                            
+
                             <div class="vote-counts">
                                 <span class="vote-count-right">0</span>
                             </div>
-                            
+
                             <div class="vote-indicator">
                                 <div class="vote-indicator-fill"></div>
                             </div>
@@ -592,12 +599,8 @@
                         <!-- Comments will be loaded here -->
                     </div>
                     <div class="comment-input-section">
-                        <textarea 
-                            class="comment-input" 
-                            id="commentText"
-                            name="commentText"
-                            placeholder="Drop your thoughts..."
-                        ></textarea>
+                        <textarea class="comment-input" id="commentText" name="commentText"
+                            placeholder="Drop your thoughts..."></textarea>
                         <button class="post-comment-btn" id="postCommentBtn" name="postCommentBtn">Post 💭</button>
                     </div>
                 </div>
@@ -608,7 +611,7 @@
     <section id="how-it-works" class="content-section hidden">
         <div class="section-content how-it-works-content">
             <h2 class="section-title">How It Works</h2>
-            
+
             <!-- Interactive Timeline -->
             <div class="timeline-section">
                 <h3>Get Started in 5 Simple Steps</h3>
@@ -725,7 +728,9 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Battles are turn-based rap competitions where two rappers face off. Each rapper gets 2 minutes per turn to deliver their verses. The community votes for their favorite performance.
+                            Battles are turn-based rap competitions where two rappers face off. Each rapper gets 2
+                            minutes per turn to deliver their verses. The community votes for their favorite
+                            performance.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -734,7 +739,8 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Anyone can vote for their favorite rapper during a battle. Votes are counted in real-time, and the rapper with the most votes wins the battle.
+                            Anyone can vote for their favorite rapper during a battle. Votes are counted in real-time,
+                            and the rapper with the most votes wins the battle.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -743,7 +749,8 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Yes! Spectator mode allows you to watch battles, vote for your favorite performers, and engage in the community chat without participating in the battle directly.
+                            Yes! Spectator mode allows you to watch battles, vote for your favorite performers, and
+                            engage in the community chat without participating in the battle directly.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -752,7 +759,9 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            BarWars combines AI-powered voice conversion, real-time battles, and a vibrant community. Our platform offers unique features like voice customization, pre-written verse suggestions, and an interactive voting system.
+                            BarWars combines AI-powered voice conversion, real-time battles, and a vibrant community.
+                            Our platform offers unique features like voice customization, pre-written verse suggestions,
+                            and an interactive voting system.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -761,7 +770,8 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Our AI technology converts your written verses into dynamic rap vocals. You can choose from various voice styles and customize the delivery to match your style.
+                            Our AI technology converts your written verses into dynamic rap vocals. You can choose from
+                            various voice styles and customize the delivery to match your style.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -770,7 +780,8 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Win battles, receive votes, and engage with the community. Your ranking increases based on your performance, consistency, and community engagement.
+                            Win battles, receive votes, and engage with the community. Your ranking increases based on
+                            your performance, consistency, and community engagement.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -779,7 +790,8 @@
                             <span class="toggle-icon">+</span>
                         </div>
                         <div class="faq-answer">
-                            Yes, we maintain a respectful environment. No hate speech, explicit content, or personal attacks. Focus on creativity, wordplay, and musical talent.
+                            Yes, we maintain a respectful environment. No hate speech, explicit content, or personal
+                            attacks. Focus on creativity, wordplay, and musical talent.
                         </div>
                     </div>
                 </div>
