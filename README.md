@@ -1,4 +1,4 @@
-# Rap Battle App
+# BarWars
 
 An interactive rap battle platform where users can engage in rap battles using AI-powered voice conversion.
 
